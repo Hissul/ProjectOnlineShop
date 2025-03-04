@@ -1,0 +1,26 @@
+@Server_HostAddress = http://localhost:5242
+
+GET {{Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+POST {{Server_HostAddress}}/register
+Content-Type: application/json
+
+{
+    "email": "test@test.com",
+    "password": "Test123!"
+}
+
+###
+
+POST {{Server_HostAddress}}/login
+Content-Type: application/json
+
+{
+    "email": "test@test.com",
+    "password": "Test123!"
+}
+
+###

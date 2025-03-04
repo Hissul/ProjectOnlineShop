@@ -1,0 +1,54 @@
+﻿@page
+@model Client.Pages.Auth.LoginModel
+@{
+    ViewData["Title"] = "Вход";
+}
+
+<div class="container text-center ">
+    <div class="row main-page-div align-items-center">
+        <div class="col">
+        </div>
+
+        <div class="col-10 ">
+
+            <h1 class="h1">@ViewData["Title"]</h1>
+
+            <div class="login-div">
+                <section>
+                    <form id="account" method="post">
+                        <hr />
+                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                        <div class="form-floating mb-3">
+                            <input asp-for="LogModel.Email" class="form-control  input-style" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                            <label asp-for="LogModel.Email" class="form-label">Email</label>
+                            <span asp-validation-for="LogModel.Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input asp-for="LogModel.Password" class="form-control  input-style" autocomplete="current-password" aria-required="true" placeholder="password" />
+                            <label asp-for="LogModel.Password" class="form-label">Password</label>
+                            <span asp-validation-for="LogModel.Password" class="text-danger"></span>
+                        </div>                        
+                        <div class="mb-3">
+                            <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary my-btn">Войти</button>
+                        </div>
+                        <div>
+                            <p>
+                                <a id="forgot-password" asp-page="./ForgotPassword" class="body">Забыли свой пароль?</a>
+                            </p>
+                            <p>
+                                <a asp-page="Register" class="body">Зарегистрируйтесь как новый пользователь</a>
+                            </p>
+                         @*    <p>
+                                <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" class="body">Повторная отправка подтверждения по электронной почте</a>
+                            </p> *@
+                        </div>
+                    </form>
+                </section>
+            </div>
+
+        </div>
+
+        <div class="col">
+        </div>
+    </div>
+</div>
