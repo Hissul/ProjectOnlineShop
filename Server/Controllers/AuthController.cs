@@ -44,21 +44,29 @@ public class AuthController : Controller {
 
 
     [HttpPost ("login")]
-    public async Task<IActionResult> Login ([FromBody] LoginModel model) {
+    public async Task<ActionResult<UserModel>> Login ([FromBody] LoginModel model) {
+
+        if (model == null || string.IsNullOrEmpty (model.Email) || string.IsNullOrEmpty (model.Password))
+            return BadRequest (new { message = "Некорректные данные" });
 
         ApplicationUser? user = await _userManager.FindByEmailAsync (model.Email);
 
         if (user == null)
             return Unauthorized (new { message = "Неверные учетные данные" });
 
-        // попытка аутентификации пользователя с использованием ASP.NET Core Identity
+        // попытка аутентификации пользователя 
         var result = await _signInManager.PasswordSignInAsync (user, model.Password, false, false);
 
         if (!result.Succeeded)
-            return Unauthorized (new { message = "Неверные учетные данные" });
+            return Unauthorized (new { message = "Неверные учетные данные" });        
 
-        var token = GenerateJwtToken (user);
-        return Ok (new { token });
+        string token = GenerateJwtToken (user);
+
+        IList<string> roles = await _userManager.GetRolesAsync (user);
+
+        UserModel userModel = new UserModel { Email = user.Email, Token = token, Roles = roles };
+
+        return Ok ( userModel);       
     }
 
 
@@ -80,4 +88,13 @@ public class AuthController : Controller {
 
         return new JwtSecurityTokenHandler ().WriteToken (token);
     }
+
+
+    [HttpPost("logout")]
+    public async Task<IActionResult> LogoutAsync (bool param) {
+        await _signInManager.SignOutAsync ();
+        return Ok ();
+    }
+
+
 }

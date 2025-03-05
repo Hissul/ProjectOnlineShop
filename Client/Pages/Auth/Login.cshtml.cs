@@ -2,6 +2,7 @@ using Client.Models;
 using Client.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Text.Json;
 
 namespace Client.Pages.Auth
 {
@@ -11,13 +12,7 @@ namespace Client.Pages.Auth
 
         public LoginModel (ApiService apiService) {
             _apiService = apiService;
-        }
-
-        //[BindProperty]
-        //public string Email { get; set; }
-
-        //[BindProperty]
-        //public string Password { get; set; }
+        }   
 
         [BindProperty]
         public LogModel LogModel { get; set; }
@@ -27,14 +22,21 @@ namespace Client.Pages.Auth
 
         public async Task<IActionResult> OnPost() {
 
-            string token = await _apiService.LoginAsync(LogModel.Email, LogModel.Password);
 
-            if(token == null) {
-                ModelState.AddModelError ("", "Ошибка входа");
-                return Page();
+            UserModel? authResponse = await _apiService.LoginAsync (LogModel.Email, LogModel.Password);
+
+            if (authResponse == null) {
+                ModelState.AddModelError ("", "Ошибка входа. Проверьте email и пароль.");
+                return Page ();
             }
 
-            _apiService.SetToken(token);
+            //_apiService.SetToken (authResponse.Token);
+
+            // Сохраняем токен и роли в сессию
+            HttpContext.Session.SetString ("auth_token", authResponse.Token);
+            HttpContext.Session.SetString ("user_role", string.Join (",", authResponse.Roles));
+           
+
             return RedirectToPage ("/Index");
         }
     }

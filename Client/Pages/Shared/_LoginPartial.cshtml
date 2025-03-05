@@ -1,0 +1,52 @@
+﻿@inject IHttpContextAccessor HttpContextAccessor
+
+@{    
+    var roleString = HttpContextAccessor.HttpContext.Session.GetString("user_role");
+    var roles = roleString?.Split(",") ?? new string[0];   
+}
+
+
+@* @{
+    var isAuthenticated = false;
+    string[] roles = ["User"];
+} *@
+
+<ul class="navbar-nav header">
+    @if (!string.IsNullOrEmpty(roleString))
+    {
+        <li class="nav-item header">
+            <a class="nav-link text-dark header  my-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Привет, !</a>
+        </li>
+
+        @if (roles.Contains("Admin"))
+        {
+              <li class="nav-item">
+                <a class="nav-link" asp-page="/Admin/Dashboard">Админ-панель</a>
+            </li>
+        }
+        else if (roles.Contains("User"))
+        {
+            <li class="nav-item header">
+                <a class="nav-link text-dark header  my-link" asp-page="/Cart/Index">Корзина</a>
+            </li>
+            <li class="nav-item header">
+                <a class="nav-link text-dark header  my-link" asp-page="/Orders/Index">Заказы</a>
+            </li>
+        }
+
+        <li class="nav-item header">
+            <form class="form-inline header" asp-area="Identity" asp-page="/Auth/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
+                <button type="submit" class="nav-link btn btn-link text-dark header  my-link">Выход</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item header">
+            <a class="nav-link text-dark header  my-link" asp-area="Identity" asp-page="/Auth/Register">Регистрация</a>
+        </li>
+        <li class="nav-item header">
+            <a class="nav-link text-dark header  my-link" asp-area="Identity" asp-page="/Auth/Login">Вход</a>
+        </li>
+    }
+</ul>

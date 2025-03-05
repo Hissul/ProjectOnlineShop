@@ -21,11 +21,11 @@ namespace Client.Pages.Auth
 
         public async Task<IActionResult> OnPost () {
 
-            string result = await _apiService.RegisterAsync (RegModel.Email, RegModel.Password);
+            bool success = await _apiService.RegisterAsync (RegModel.Email, RegModel.Password);
 
-            if (result == null) {
-                ModelState.AddModelError ("", "Ошибка регистрации");
-                return Page();
+            if (!success) {
+                ModelState.AddModelError ("", "Ошибка регистрации. Попробуйте снова.");
+                return Page ();
             }
 
             return RedirectToPage ("/Index");

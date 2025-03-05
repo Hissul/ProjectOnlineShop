@@ -1,14 +1,36 @@
+using Client.Models;
 using Client.Services;
 
-var builder = WebApplication.CreateBuilder (args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder (args);
 
 builder.Services.AddRazorPages ();
 
-builder.Services.AddHttpClient<ApiService> (client => {
+// Регистрируем HttpClient для ApiService
+builder.Services.AddHttpClient<ApiService>(client =>
+{
     client.BaseAddress = new Uri ("http://localhost:5242/"); // Адрес API
 });
 
-var app = builder.Build ();
+// Добавляем кэш для сессий
+builder.Services.AddDistributedMemoryCache (); // Это необходимо для хранения данных сессии в памяти
+
+// Настройка сессий
+builder.Services.AddSession (options => {
+    options.IdleTimeout = TimeSpan.FromMinutes (30); // Время жизни сессии
+    options.Cookie.HttpOnly = true; // Защищаем сессию
+    options.Cookie.IsEssential = true; // Сессия будет необходимой для приложения
+});
+
+// Регистрируем IHttpContextAccessor
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor> ();
+builder.Services.AddSingleton<UserModel> ();
+
+
+
+WebApplication app = builder.Build ();
+
+
+
 
 if (!app.Environment.IsDevelopment ()) {
     app.UseExceptionHandler ("/Error");
@@ -16,13 +38,21 @@ if (!app.Environment.IsDevelopment ()) {
 }
 
 app.UseHttpsRedirection ();
+app.UseStaticFiles ();
 
+// Используем сессии
+app.UseSession ();
 app.UseRouting ();
-
+app.UseAuthentication ();
 app.UseAuthorization ();
 
-app.MapStaticAssets ();
-app.MapRazorPages ()
-   .WithStaticAssets ();
+// Карты маршрутов
+app.MapRazorPages ().WithStaticAssets ();
+
+
+
 
 app.Run ();
+
+
+
