@@ -5,12 +5,6 @@
     var roles = roleString?.Split(",") ?? new string[0];   
 }
 
-
-@* @{
-    var isAuthenticated = false;
-    string[] roles = ["User"];
-} *@
-
 <ul class="navbar-nav header">
     @if (!string.IsNullOrEmpty(roleString))
     {

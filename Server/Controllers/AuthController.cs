@@ -9,7 +9,8 @@ using System.Text;
 
 namespace Server.Controllers;
 
-
+[Route ("auth")]
+[ApiController]
 public class AuthController : Controller {
 
     private readonly UserManager<ApplicationUser> _userManager;
@@ -71,7 +72,7 @@ public class AuthController : Controller {
 
 
     private string GenerateJwtToken (ApplicationUser user) {
-        byte[] key = Encoding.UTF8.GetBytes (_config["Jwt:Secret"]);
+        byte[] key = Encoding.UTF8.GetBytes (_config["Jwt:Secret"]!);
 
         Claim[] claims = new[] {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id),

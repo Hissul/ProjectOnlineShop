@@ -24,7 +24,7 @@ public class ApiService {
     public async Task<UserModel?> LoginAsync (string email, string password) {
 
         try {
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync ("login", new { Email = email, Password = password });
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync ("auth/login", new { Email = email, Password = password });
 
             if (!response.IsSuccessStatusCode) {
                 string error = await response.Content.ReadAsStringAsync ();
@@ -83,7 +83,7 @@ public class ApiService {
     // Регистрация   
     public async Task<bool> RegisterAsync (string email, string password) {
         try {
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync ("register", new { Email = email, Password = password });
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync ("auth/register", new { Email = email, Password = password });
 
             if (!response.IsSuccessStatusCode) {
                 string error = await response.Content.ReadAsStringAsync ();
@@ -104,7 +104,7 @@ public class ApiService {
     public async Task<bool> LogoutAsync (bool param) {
 
         try {
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync ("logout", true);
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync ("auth/logout", true);
 
             if (!response.IsSuccessStatusCode) {
                 string error = await response.Content.ReadAsStringAsync ();

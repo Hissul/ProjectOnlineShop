@@ -28,9 +28,7 @@ namespace Client.Pages.Auth
             if (authResponse == null) {
                 ModelState.AddModelError ("", "Ошибка входа. Проверьте email и пароль.");
                 return Page ();
-            }
-
-            //_apiService.SetToken (authResponse.Token);
+            }          
 
             // Сохраняем токен и роли в сессию
             HttpContext.Session.SetString ("auth_token", authResponse.Token);
@@ -39,5 +37,7 @@ namespace Client.Pages.Auth
 
             return RedirectToPage ("/Index");
         }
+
+
     }
 }

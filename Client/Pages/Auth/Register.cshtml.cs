@@ -17,7 +17,9 @@ namespace Client.Pages.Auth
         [BindProperty]
         public RegModel RegModel { get; set; }
 
+
         public void OnGet(){}
+
 
         public async Task<IActionResult> OnPost () {
 
@@ -30,5 +32,7 @@ namespace Client.Pages.Auth
 
             return RedirectToPage ("/Index");
         }
+
+
     }
 }
