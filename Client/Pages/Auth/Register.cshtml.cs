@@ -8,9 +8,9 @@ namespace Client.Pages.Auth
 {
     public class RegisterModel : PageModel
     {
-        private readonly ApiService _apiService;
+        private readonly LoginService _apiService;
 
-        public RegisterModel (ApiService apiService) {
+        public RegisterModel (LoginService apiService) {
             _apiService = apiService;
         }
 

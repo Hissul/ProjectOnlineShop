@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Server.Data;
+using Server.Services;
 using System.Text;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,8 @@ string? audience = builder.Configuration["Jwt:Audience"];
 
 byte[] key = Encoding.UTF8.GetBytes (keyString);
 
+
+builder.Services.AddScoped<AuthService> ();
 
 builder.Services.AddDbContext<ApplicationDbContext> (options => options.UseSqlServer (connectionString));
 

@@ -7,9 +7,9 @@ namespace Client.Pages.Auth
 {
     public class LogoutModel : PageModel
     {
-        private readonly ApiService _apiService;
+        private readonly LoginService _apiService;
 
-        public LogoutModel (ApiService apiService) {
+        public LogoutModel (LoginService apiService) {
             _apiService = apiService;
         }
 

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Server.Data;
 using Server.Models;
+using Server.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -13,34 +14,24 @@ namespace Server.Controllers;
 [ApiController]
 public class AuthController : Controller {
 
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly RoleManager<IdentityRole> _roleManager;
-    private readonly IConfiguration _config;
+    private readonly AuthService _authService;
 
-    public AuthController (UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, IConfiguration config) {
-        _userManager = userManager;
-        _signInManager = signInManager;
-        _roleManager = roleManager;
-        _config = config;
+    public AuthController (AuthService authService) {
+        _authService = authService;
     }
 
     [HttpPost ("register")]
     public async Task<IActionResult> Register ([FromBody] RegisterModel model) {
 
-        ApplicationUser user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-        IdentityResult result = await _userManager.CreateAsync (user, model.Password);
+        IdentityResult result = await _authService.RegisterAsync (model);
 
-        if (!result.Succeeded)
+        if (!result.Succeeded) 
             return BadRequest (result.Errors);
-
-        if (!await _roleManager.RoleExistsAsync ("User")) 
-            await _roleManager.CreateAsync (new IdentityRole ("User"));        
-
-        await _userManager.AddToRoleAsync (user, "User");
+        
 
         return Ok (new { message = "Пользователь зарегистрирован!" });
     }
+
 
 
 
@@ -50,52 +41,21 @@ public class AuthController : Controller {
         if (model == null || string.IsNullOrEmpty (model.Email) || string.IsNullOrEmpty (model.Password))
             return BadRequest (new { message = "Некорректные данные" });
 
-        ApplicationUser? user = await _userManager.FindByEmailAsync (model.Email);
+        UserModel? loginResult = await _authService.LoginAsync (model);
 
-        if (user == null)
-            return Unauthorized (new { message = "Неверные учетные данные" });
+        if(loginResult == null)
+            return Unauthorized (new { message = "Неверный email или пароль" });
 
-        // попытка аутентификации пользователя 
-        var result = await _signInManager.PasswordSignInAsync (user, model.Password, false, false);
-
-        if (!result.Succeeded)
-            return Unauthorized (new { message = "Неверные учетные данные" });        
-
-        string token = GenerateJwtToken (user);
-
-        IList<string> roles = await _userManager.GetRolesAsync (user);
-
-        UserModel userModel = new UserModel { Email = user.Email, Token = token, Roles = roles };
-
-        return Ok ( userModel);       
+        return Ok (loginResult);
     }
 
 
-    private string GenerateJwtToken (ApplicationUser user) {
-        byte[] key = Encoding.UTF8.GetBytes (_config["Jwt:Secret"]!);
-
-        Claim[] claims = new[] {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
-
-        var token = new JwtSecurityToken (
-            issuer: _config["Jwt:Issuer"],
-            audience: _config["Jwt:Audience"],
-            claims: claims,
-            expires: DateTime.UtcNow.AddHours (1),
-            signingCredentials: new SigningCredentials (new SymmetricSecurityKey (key), SecurityAlgorithms.HmacSha256));
-
-        return new JwtSecurityTokenHandler ().WriteToken (token);
-    }
-
-
-    [HttpPost("logout")]
+    [HttpPost ("logout")]
     public async Task<IActionResult> LogoutAsync (bool param) {
-        await _signInManager.SignOutAsync ();
-        return Ok ();
+        await _authService.LogoutAsync ();
+        return Ok (new { message = "Выход выполнен успешно" });
     }
+
 
 
 }

@@ -8,20 +8,20 @@ namespace Client.Pages.Auth
 {
     public class LoginModel : PageModel
     {
-        private readonly ApiService _apiService;
+        private readonly LoginService _apiService;
 
-        public LoginModel (ApiService apiService) {
+        public LoginModel (LoginService apiService) {
             _apiService = apiService;
         }   
 
         [BindProperty]
         public LogModel LogModel { get; set; }
 
+
         public void OnGet() {}
 
 
         public async Task<IActionResult> OnPost() {
-
 
             UserModel? authResponse = await _apiService.LoginAsync (LogModel.Email, LogModel.Password);
 
@@ -33,6 +33,10 @@ namespace Client.Pages.Auth
             // Сохраняем токен и роли в сессию
             HttpContext.Session.SetString ("auth_token", authResponse.Token);
             HttpContext.Session.SetString ("user_role", string.Join (",", authResponse.Roles));
+
+            if (authResponse.Roles.Contains ("Admin")) {
+                return RedirectToPage ("/Admin/Dashboard");
+            }
            
 
             return RedirectToPage ("/Index");

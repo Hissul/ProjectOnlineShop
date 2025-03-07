@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Client.Services;
 
-public class ApiService {
+public class LoginService {
 
     private readonly HttpClient _httpClient;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public ApiService (HttpClient httpClient, IHttpContextAccessor httpContextAccessor) {
+    public LoginService (HttpClient httpClient, IHttpContextAccessor httpContextAccessor) {
         _httpClient = httpClient;
         _httpContextAccessor = httpContextAccessor;
     }
