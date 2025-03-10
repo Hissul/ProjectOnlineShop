@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Server.Models;
+
 using Server.Services;
+using ShopLib;
 
 namespace Server.Controllers;
 

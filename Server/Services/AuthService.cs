@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Server.Data;
-using Server.Models;
+using ShopLib;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -29,6 +29,7 @@ public class AuthService {
     public async Task<UserModel?> LoginAsync (LoginModel model) { 
 
         ApplicationUser? user = await _userManager.FindByEmailAsync (model.Email);
+
         if (user == null)
             return null;
 
@@ -42,7 +43,13 @@ public class AuthService {
 
         IList<string> roles = await _userManager.GetRolesAsync (user);
 
-        UserModel userModel = new UserModel { Email = user.Email, Token = token, Roles = roles };
+        UserModel userModel = new UserModel { 
+            Id = user.Id, 
+            FullName = user.FullName, 
+            Email = user.Email, 
+            Token = token, 
+            Roles = roles 
+        };
 
         return userModel;
     }

@@ -20,7 +20,7 @@
                             <div class="card border-0 shadow-sm rounded-0">
 
                                 <div class="position-relative">
-                                    <a asp-page="/Store/Details" asp-route-id="@product.Id">
+                                    <a asp-page="/Store/Details" asp-route-productId="@product.Id">
                                         <img src="data:image/jpeg;base64,@Convert.ToBase64String(product.Image)"
                                              class="card-img-top rounded-0" alt="@product.Name">
                                     </a>
@@ -41,7 +41,7 @@
 
                                     <p class="fs-4 fw-bold">@product.Price руб.</p>
 
-                                    <a asp-page="~/Cart/Add" asp-route-id="@product.Id"
+                                    <a asp-page="/Cart/Add" asp-route-productId="@product.Id"
                                        class="btn btn-dark w-100 rounded-0">ЗАКАЗАТЬ КАРТИНУ</a>
                                 </div>
                             </div>

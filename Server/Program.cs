@@ -20,6 +20,7 @@ byte[] key = Encoding.UTF8.GetBytes (keyString);
 
 builder.Services.AddScoped<AuthService> ();
 builder.Services.AddScoped<StoreService> ();
+builder.Services.AddScoped<CartService> ();
 
 builder.Services.AddDbContext<ApplicationDbContext> (options => options.UseSqlServer (connectionString));
 

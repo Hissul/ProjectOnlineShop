@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Server.Data;
 using Server.Data.Entities;
-using Server.Models;
+using ShopLib;
+
 
 namespace Server.Services;
 
@@ -13,6 +14,9 @@ public class StoreService {
         _context = context;
     }
 
+    /// <summary>
+    /// Получение всех продуктов
+    /// </summary>
     public async Task<List<ProductShortModel>> GetAllProductAsync () {
         List<ProductShortModel> res = await _context.Products
             .Select (p => new ProductShortModel {
@@ -27,6 +31,9 @@ public class StoreService {
         return res;
     }
 
+    /// <summary>
+    /// Получение полной информации о продукте
+    /// </summary>
     public async Task<ProductFullModel?> GetProductFullAsync (int id) {   
 
         ProductFullModel? product = await _context.Products

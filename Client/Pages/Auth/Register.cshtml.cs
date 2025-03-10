@@ -1,4 +1,5 @@
-using Client.Models;
+
+using ShopLib;
 using Client.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -15,7 +16,7 @@ namespace Client.Pages.Auth
         }
 
         [BindProperty]
-        public RegModel RegModel { get; set; }
+        public ShopLib.RegisterModel RegModel { get; set; }
 
 
         public void OnGet(){}

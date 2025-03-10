@@ -1,7 +1,8 @@
-using Client.Models;
+
 using Client.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using ShopLib;
 
 namespace Client.Pages;
 public class IndexModel : PageModel {

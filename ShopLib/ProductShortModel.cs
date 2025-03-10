@@ -1,5 +1,10 @@
-﻿namespace Client.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
+namespace ShopLib;
 public class ProductShortModel {
     public int Id { get; set; }
     public string Name { get; set; }

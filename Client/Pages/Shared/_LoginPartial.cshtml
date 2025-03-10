@@ -1,15 +1,16 @@
 ﻿@inject IHttpContextAccessor HttpContextAccessor
 
-@{    
+@{
     var roleString = HttpContextAccessor.HttpContext.Session.GetString("user_role");
-    var roles = roleString?.Split(",") ?? new string[0];   
+    var roles = roleString?.Split(",") ?? new string[0];
+    var userName = HttpContextAccessor.HttpContext.Session.GetString("user_name");
 }
 
 <ul class="navbar-nav header">
     @if (!string.IsNullOrEmpty(roleString))
     {
         <li class="nav-item header">
-            <a class="nav-link text-dark header  my-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Привет, !</a>
+            <a class="nav-link text-dark header  my-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Привет, @userName!</a>
         </li>
 
         @if (roles.Contains("Admin"))
@@ -21,7 +22,7 @@
         else if (roles.Contains("User"))
         {
             <li class="nav-item header">
-                <a class="nav-link text-dark header  my-link" asp-page="/Cart/Index">Корзина</a>
+                <a class="nav-link text-dark header  my-link" asp-page="/Cart/UserCart">Корзина</a>
             </li>
             <li class="nav-item header">
                 <a class="nav-link text-dark header  my-link" asp-page="/Orders/Index">Заказы</a>

@@ -1,4 +1,6 @@
-﻿using Client.Models;
+﻿
+
+using ShopLib;
 
 namespace Client.Services;
 

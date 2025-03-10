@@ -1,7 +1,8 @@
-using Client.Models;
+
 using Client.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using ShopLib;
 
 namespace Client.Pages.Store
 {
@@ -16,8 +17,8 @@ namespace Client.Pages.Store
 
         public ProductFullModel Product { get; set; }
 
-        public async Task OnGet(int id){
-            Product = await storeService.GetFullProductAsync(id);
+        public async Task OnGet(int productId){
+            Product = await storeService.GetFullProductAsync(productId);
         }
     }
 }

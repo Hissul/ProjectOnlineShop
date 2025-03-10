@@ -1,5 +1,6 @@
-using Client.Models;
+
 using Client.Services;
+using ShopLib;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder (args);
 
@@ -12,6 +13,11 @@ builder.Services.AddHttpClient<LoginService>(client => {
 
 // Регистрируем HttpClient для ProductService
 builder.Services.AddHttpClient<StoreService> (client => {
+    client.BaseAddress = new Uri ("http://localhost:5242/"); // Адрес API
+});
+
+// Регистрируем HttpClient для CartService
+builder.Services.AddHttpClient<CartService> (client => {
     client.BaseAddress = new Uri ("http://localhost:5242/"); // Адрес API
 });
 

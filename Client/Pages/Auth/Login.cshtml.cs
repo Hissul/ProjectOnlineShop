@@ -1,7 +1,8 @@
-using Client.Models;
+
 using Client.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using ShopLib;
 using System.Text.Json;
 
 namespace Client.Pages.Auth
@@ -15,7 +16,7 @@ namespace Client.Pages.Auth
         }   
 
         [BindProperty]
-        public LogModel LogModel { get; set; }
+        public ShopLib.LoginModel LogModel { get; set; }
 
 
         public void OnGet() {}
@@ -28,9 +29,11 @@ namespace Client.Pages.Auth
             if (authResponse == null) {
                 ModelState.AddModelError ("", "Ошибка входа. Проверьте email и пароль.");
                 return Page ();
-            }          
+            }
 
             // Сохраняем токен и роли в сессию
+            HttpContext.Session.SetString ("user_id", authResponse.Id);
+            HttpContext.Session.SetString ("user_name", authResponse.FullName);
             HttpContext.Session.SetString ("auth_token", authResponse.Token);
             HttpContext.Session.SetString ("user_role", string.Join (",", authResponse.Roles));
 
