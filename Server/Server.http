@@ -5,7 +5,8 @@ POST {{Server_HostAddress}}/auth/register
 Content-Type: application/json
 {
     "email": "test@test.com",
-    "password": "Test123!"
+    "password": "Test123!",
+    "fullName": "Tester"
 }
 
 ###
@@ -15,6 +16,7 @@ Content-Type: application/json
 {
     "email": "test@test.com",
     "password": "Test123!"
+    
 }
 
 ###
@@ -24,6 +26,20 @@ Content-Type: application/json
 {
     "email": "test@test.com",
     "password": "Test123!"
+}
+
+###
+
+GET {{Server_HostAddress}}/store/all
+Content-Type: application/json
+{
+}
+
+###
+
+GET {{Server_HostAddress}}/store/full_info/6
+Content-Type: application/json
+{
 }
 
 ###

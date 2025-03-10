@@ -1,0 +1,67 @@
+﻿@page
+@model Client.Pages.Store.DetailsModel
+
+@{
+
+}
+
+
+
+<div class="container mt-4">
+    <div class="row g-5">
+        <!-- Левая часть с изображением -->
+        <div class="col-md-7 img-container">
+            <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Product.Image)" class="img-fluid" alt="@Model.Product.Name">
+        </div>
+
+        <!-- Правая часть с информацией -->
+        <div class="col-md-5 pt-4">
+            <h2 class="fw-bold">@Model.Product.Name</h2>
+            <p class="mt-3"><strong>@Model.Product.Size</strong></p>
+            <p class="text-muted">@Model.Product.Style</p>
+            
+
+            <div class="mb-3">
+                <span class="badge bg-secondary">@Model.Product.Material</span>               
+            </div>          
+
+            <h4 class="fw-bold"> $ @Model.Product.Price </h4>
+
+            <button class="btn btn-dark w-100 my-2">Купить за @Model.Product.Price ₽</button>
+            <button class="btn btn-outline-dark w-100">Добавить оформление</button>
+
+            <p class="mt-3"><strong>Художник:</strong> Художник</p>
+        </div>
+    </div>
+
+    <!-- Блок "О работе" -->
+    <div class="row mt-5">
+        <div class="col-md-7">
+            <h4>О работе</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Материалы:</strong> @Model.Product.Material</p>
+                    <p><strong>Техника:</strong> @Model.Product.Technique</p>
+                    <p><strong>Размер:</strong> @Model.Product.Size</p>
+
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Год создания:</strong> @Model.Product.Year</p>
+                    <p><strong>Сюжет:</strong> @Model.Product.Plot</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Блок "О художнике" -->
+@*     <div class="row mt-5">
+        <div class="col-md-2">
+            <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Product.ArtistImage)" class="rounded-circle img-fluid" alt="@Model.Product.Artist">
+        </div>
+        <div class="col-md-10">
+            <h5>@Model.Product.Artist</h5>
+            <p>@Model.Product.ArtistBio</p>
+        </div>
+    </div> *@
+</div>
+

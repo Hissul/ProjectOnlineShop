@@ -76,7 +76,13 @@ public class AuthService {
     /// Регистрация нового пользователя
     /// </summary>
     public async Task<IdentityResult> RegisterAsync (RegisterModel model) {
-        ApplicationUser user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+
+        ApplicationUser user = new ApplicationUser { 
+            UserName = model.Email, 
+            Email = model.Email, 
+            FullName = model.FullName 
+        };
+
         IdentityResult result = await _userManager.CreateAsync (user, model.Password);
 
         if (result.Succeeded) {

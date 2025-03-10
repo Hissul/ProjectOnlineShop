@@ -29,3 +29,18 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+/* блок с картинкой */
+.img-container {
+    max-height: 500px;
+    overflow: hidden;
+    display: flex;   
+    justify-content: center;
+    align-items: center;
+}
+
+    .img-container img {
+        max-height: 100%;
+        width: auto;
+        object-fit: contain; /* Вписывает изображение в контейнер, не обрезая */
+    }

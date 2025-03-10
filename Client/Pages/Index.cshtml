@@ -4,7 +4,55 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container text-center mt-5">
+    <div class="row showcase-page-div align-items-center header">
+        <div class="col">
+        </div>
+
+        <div class="col-10">
+            <div class="row text-center">
+
+                @if (Model.Products != null)
+                {
+                    @foreach (var product in Model.Products)
+                    {
+                        <div class="col-md-4 mb-5">
+                            <div class="card border-0 shadow-sm rounded-0">
+
+                                <div class="position-relative">
+                                    <a asp-page="/Store/Details" asp-route-id="@product.Id">
+                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(product.Image)"
+                                             class="card-img-top rounded-0" alt="@product.Name">
+                                    </a>
+
+                                    @if(product.StockQuantity > 0 ){
+                                        <span class="badge bg-success position-absolute top-0 start-0 m-2">В наличии</span>
+                                    }else{
+                                        <span class="badge bg-warning position-absolute top-0 start-0 m-2">Можно заказать</span>
+                                    }
+                                    
+                                </div>
+
+                                <div class="card-body text-center p-0">
+                                    <h5 class="fw-bold">@product.Name</h5>
+
+                                    @*    <p class="text-muted">Размер картины <span class="border border-success text-success px-2 py-1 rounded">@product.Size</span></p> *@
+
+
+                                    <p class="fs-4 fw-bold">@product.Price руб.</p>
+
+                                    <a asp-page="~/Cart/Add" asp-route-id="@product.Id"
+                                       class="btn btn-dark w-100 rounded-0">ЗАКАЗАТЬ КАРТИНУ</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+
+            </div>
+        </div>
+
+        <div class="col">
+        </div>
+    </div>
 </div>

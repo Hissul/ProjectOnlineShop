@@ -15,4 +15,7 @@ public class RegModel {
     [DataType (DataType.Password)]
     [Compare ("Password", ErrorMessage = "Пароли не совпадают.")]
     public string ConfirmPassword { get; set; } = default!;
+
+    [Required]
+    public string FullName { get; set; }
 }

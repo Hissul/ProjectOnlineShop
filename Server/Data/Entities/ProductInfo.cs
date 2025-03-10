@@ -9,7 +9,7 @@ public class ProductInfo {
     public string Plot { get; set; }
     public string Style { get; set; }
     public int Height { get; set; }
-    public string Wight { get; set; }    
+    public int Wight { get; set; }    
     public int Year { get; set; }
    
 

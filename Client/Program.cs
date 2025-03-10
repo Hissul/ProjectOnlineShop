@@ -6,8 +6,12 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder (args);
 builder.Services.AddRazorPages ();
 
 // Регистрируем HttpClient для ApiService
-builder.Services.AddHttpClient<LoginService>(client =>
-{
+builder.Services.AddHttpClient<LoginService>(client => {
+    client.BaseAddress = new Uri ("http://localhost:5242/"); // Адрес API
+});
+
+// Регистрируем HttpClient для ProductService
+builder.Services.AddHttpClient<StoreService> (client => {
     client.BaseAddress = new Uri ("http://localhost:5242/"); // Адрес API
 });
 

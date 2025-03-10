@@ -19,6 +19,7 @@ byte[] key = Encoding.UTF8.GetBytes (keyString);
 
 
 builder.Services.AddScoped<AuthService> ();
+builder.Services.AddScoped<StoreService> ();
 
 builder.Services.AddDbContext<ApplicationDbContext> (options => options.UseSqlServer (connectionString));
 
@@ -61,6 +62,12 @@ builder.Services.AddAuthorization (options => {
 
 WebApplication app = builder.Build();
 
+//using (var scope = app.Services.CreateScope ()) {
+//    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext> ();
+//    dbContext.Database.EnsureDeleted (); // Удаляет базу данных
+//    dbContext.Database.EnsureCreated (); // Создает базу данных заново
+//}
+
 
 
 using (IServiceScope scope = app.Services.CreateScope ()) {
@@ -97,7 +104,12 @@ async Task CreateRole (IServiceProvider serviceProvider) {
     ApplicationUser? adminUSer = await userManager.FindByEmailAsync (adminEmail);
 
     if (adminUSer == null) {
-        ApplicationUser newAdmin = new ApplicationUser { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true };
+        ApplicationUser newAdmin = new ApplicationUser { 
+            UserName = adminEmail, 
+            Email = adminEmail, 
+            EmailConfirmed = true,
+            FullName = "I'm the Boss"
+        };
         await userManager.CreateAsync (newAdmin, "Admin123!");
         await userManager.AddToRoleAsync (newAdmin, "Admin");
     }

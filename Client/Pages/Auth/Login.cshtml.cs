@@ -8,10 +8,10 @@ namespace Client.Pages.Auth
 {
     public class LoginModel : PageModel
     {
-        private readonly LoginService _apiService;
+        private readonly LoginService _loginService;
 
         public LoginModel (LoginService apiService) {
-            _apiService = apiService;
+            _loginService = apiService;
         }   
 
         [BindProperty]
@@ -23,7 +23,7 @@ namespace Client.Pages.Auth
 
         public async Task<IActionResult> OnPost() {
 
-            UserModel? authResponse = await _apiService.LoginAsync (LogModel.Email, LogModel.Password);
+            UserModel? authResponse = await _loginService.LoginAsync (LogModel.Email, LogModel.Password);
 
             if (authResponse == null) {
                 ModelState.AddModelError ("", "Ошибка входа. Проверьте email и пароль.");
