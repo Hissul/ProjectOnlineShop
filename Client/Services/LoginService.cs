@@ -15,8 +15,8 @@ public class LoginService {
     private readonly HttpClient _httpClient;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public LoginService (HttpClient httpClient, IHttpContextAccessor httpContextAccessor) {
-        _httpClient = httpClient;
+    public LoginService (IHttpClientFactory clientFactory, IHttpContextAccessor httpContextAccessor) {
+        _httpClient = clientFactory.CreateClient("ApiClient");
         _httpContextAccessor = httpContextAccessor;
     }
 
@@ -38,7 +38,11 @@ public class LoginService {
             if (user == null || string.IsNullOrEmpty (user.Token))
                 return null;
 
-            SetToken (user.Token);
+            //SetToken (user.Token);
+            //
+            // Сохраняем токен в сессии
+            _httpContextAccessor.HttpContext?.Session.SetString ("JwtToken", user.Token);
+            Console.WriteLine ($"Токен сохранен в сессию: {user.Token}");
 
             return user;
         }
@@ -48,37 +52,13 @@ public class LoginService {
         }
     }
 
-    //public async Task<bool> LoginAsync (string email, string password) {
-    //    var loginModel = new { Email = email, Password = password };
-    //    var response = await _httpClient.PostAsJsonAsync ("api/auth/login", loginModel);
-
-    //    if (!response.IsSuccessStatusCode)
-    //        return false;
-
-    //    var result = await response.Content.ReadFromJsonAsync<UserModel> ();
-    //    if (result == null || string.IsNullOrEmpty (result.Token))
-    //        return false;
-
-    //    // Сохраняем токен в localStorage
-    //    await SecureStorage.SetAsync ("auth_token", result.Token);
-
-    //    // Извлекаем роль из JWT
-    //    var handler = new JwtSecurityTokenHandler ();
-    //    var jwt = handler.ReadJwtToken (result.Token);
-    //    var role = jwt.Claims.FirstOrDefault (c => c.Type == ClaimTypes.Role)?.Value;
-
-    //    if (!string.IsNullOrEmpty (role)) {
-    //        await SecureStorage.SetAsync ("user_role", role);
+    //// Добавление JWT токена в заголовки
+    //public void SetToken(string token) {
+    //    if (!string.IsNullOrEmpty (token)) {
+    //        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue ("Bearer", token);
+    //        Console.WriteLine ($"Токен установлен: {_httpClient.DefaultRequestHeaders.Authorization}");
     //    }
-
-    //    return true;
     //}
-
-
-    // Добавление JWT токена в заголовки
-    public void SetToken(string token) {
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue ("Bearer", token);
-    }
 
 
     // Регистрация   

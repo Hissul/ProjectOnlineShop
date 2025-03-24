@@ -1,0 +1,82 @@
+﻿@page
+@model Client.Pages.Order.UserOrdersModel
+
+@{
+
+}
+
+
+<div class="container">
+    <h2 class="text-center my-4">Ваши заказы</h2>
+
+    @if (!Model.OrderModels.Any())
+    {
+        <p class="text-center">Заказов не найдено.</p>
+    }
+    else
+    {
+        <div class="row justify-content-center">
+            @foreach (var order in Model.OrderModels)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-lg border-0 rounded-0 text-center">
+                        <div class="card-body">
+                            <h5 class="card-title">Заказ от @order.OrderedDate.ToString("g")</h5>
+                            <p class="card-text">
+                                <strong>Статус:</strong> @order.Status <br>
+                                <strong>Сумма:</strong> $@order.TotalAmount
+                            </p>
+                            <a asp-page="/Order/Details" asp-route-orderId="@order.Id" class="btn btn-dark btn-lg rounded-0 w-50">Детали заказа</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+
+@* <div class="container text-center">
+    <div class="row  align-items-center">
+        <div class="col">
+        </div>
+
+        <div class="col-10">
+            <h2>Ваши заказы</h2>
+
+            @if (!Model.OrderModels.Any())
+            {
+                <p>Заказов не найдено.</p>
+            }
+            else
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="body">Order Date</th>
+                            <th class="body">Status</th>
+                            <th class="body">Total Amount</th>
+                            <th class="body">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model.OrderModels)
+                        {
+                            <tr>
+                                <td class="body">@order.OrderedDate.ToString("g")</td>
+                                <td class="body">@order.Status</td>
+                                <td class="body">$@order.TotalAmount</td>
+                                <td class="body">
+                                    <a asp-page="/Orders/Details" asp-route-id="@order.Id" class="btn btn-primary  my-btn">Детали заказа</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+
+        <div class="col">
+        </div>
+    </div>
+</div> *@

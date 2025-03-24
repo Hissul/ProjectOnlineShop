@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShopLib;
 
-public class AddToCartRequest {
+public class AddToCartModel {
     public string UserId { get; set; } = null!;
     public int ProductId { get; set; }
 }

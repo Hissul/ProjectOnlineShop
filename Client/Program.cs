@@ -1,4 +1,5 @@
 
+using Client.Handlers;
 using Client.Services;
 using ShopLib;
 
@@ -6,20 +7,16 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder (args);
 
 builder.Services.AddRazorPages ();
 
-// Регистрируем HttpClient для ApiService
-builder.Services.AddHttpClient<LoginService>(client => {
-    client.BaseAddress = new Uri ("http://localhost:5242/"); // Адрес API
-});
+builder.Services.AddTransient<JwtHttpMessageHandler> ();
 
-// Регистрируем HttpClient для ProductService
-builder.Services.AddHttpClient<StoreService> (client => {
-    client.BaseAddress = new Uri ("http://localhost:5242/"); // Адрес API
-});
+builder.Services.AddHttpClient ("ApiClient", client => {
+    client.BaseAddress = new Uri ("http://localhost:5242/");
+}).AddHttpMessageHandler<JwtHttpMessageHandler> ();
 
-// Регистрируем HttpClient для CartService
-builder.Services.AddHttpClient<CartService> (client => {
-    client.BaseAddress = new Uri ("http://localhost:5242/"); // Адрес API
-});
+builder.Services.AddScoped<LoginService> ();
+builder.Services.AddScoped<StoreService> ();
+builder.Services.AddScoped<CartService> ();
+builder.Services.AddScoped<OrderService> ();
 
 // Добавляем кэш для сессий
 builder.Services.AddDistributedMemoryCache (); // Это необходимо для хранения данных сессии в памяти
@@ -63,6 +60,3 @@ app.MapRazorPages ().WithStaticAssets ();
 
 
 app.Run ();
-
-
-

@@ -35,6 +35,8 @@ public class CartService {
 
             _context.Carts.Add (cart);
             await _context.SaveChangesAsync ();
+
+            // LOGER
         }
 
         CartItem? cartItem = cart.Items.FirstOrDefault (i => i.ProductId == productId);
@@ -47,13 +49,15 @@ public class CartService {
         }
 
         await _context.SaveChangesAsync ();
+
+        // LOGER
     }
 
 
     /// <summary>
     /// Получение CartItems по UserId
     /// </summary>
-    public async Task<List<ItemInCart>> GetCartItemsByUserIdAsync (string userId) {
+    public async Task<List<ItemInCartModel>> GetCartItemsByUserIdAsync (string userId) {
 
         Cart? cart = await GetCartByUserId (userId);
 
@@ -62,12 +66,14 @@ public class CartService {
 
             _context.Carts.Add (cart);
             await _context.SaveChangesAsync ();
+
+            // LOGER
         }
 
-        List<ItemInCart> items = [];
+        List<ItemInCartModel> items = [];
 
         foreach (CartItem item in cart.Items) {
-            items.Add (new ItemInCart {
+            items.Add (new ItemInCartModel {
                 Id = item.Id,
                 Quantity = item.Quantity,
                 Product = new ProductShortModel {
@@ -81,7 +87,41 @@ public class CartService {
             });
         }
 
+        // LOGER
+
         return items;
+    }
+
+
+    /// <summary>
+    /// Удаление товара из корзины
+    /// </summary>
+    public async Task RemoveFromCartAsync(string userId, int productId) {
+        Cart? cart = await GetCartByUserId (userId);
+
+        if (cart != null) {
+            CartItem? cartItem = cart.Items.FirstOrDefault (c => c.ProductId == productId);
+
+            cart.Items.Remove (cartItem);
+            await _context.SaveChangesAsync ();
+
+            // LOGER
+        }
+    }
+
+
+    /// <summary>
+    /// Очистка корзины
+    /// </summary>
+    public async Task ClearCartAsync (string userId) {
+        Cart? cart = await GetCartByUserId (userId);
+
+        if(cart != null) {
+            _context.CartItems.RemoveRange (cart.Items);
+            await _context.SaveChangesAsync ();
+
+            // LOGER
+        }
     }
 
 }

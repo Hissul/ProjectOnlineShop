@@ -5,7 +5,53 @@
 
 }
 
+
 <div class="container my-4">
+    <h2 class="text-center mb-4">Корзина</h2>
+
+    @if (Model.CartItems == null || !Model.CartItems.Any())
+    {
+        <p class="text-center">Корзина пуста.</p>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            @foreach (var item in Model.CartItems)
+            {
+                <div class="col">
+                    <div class="card shadow-lg border-0 rounded-0">
+                        <div class="row g-0 align-items-center">
+                            <div class="col-md-3 text-center">
+                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.Product.Image)" alt="@item.Product.Name" class="img-thumbnail rounded-0 border-0" style="width: 130px; height: 150px; object-fit: contain;">
+                            </div>
+                            <div class="col-md-7">
+                                <div class="card-body ">
+                                    <h5 class="card-title">@item.Product.Name</h5>
+                                    <p class="card-text">Цена: <strong>$@item.Product.Price</strong></p>
+                                    <p class="card-text">Количество: <strong>@item.Quantity</strong></p>
+                                    <p class="card-text">Итого: <strong>$@(item.Product.Price * item.Quantity)</strong></p>
+                                </div>
+                            </div>
+                            <div class="col-md-2 text-center">
+                                <a asp-page="/Cart/Remove" asp-route-productId="@item.Product.Id" class="btn btn-outline-danger">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="text-end me-5">
+            <p class="fs-5 fw-bold">Общая стоимость: $@Model.CartItems.Sum(i => i.Product.Price * i.Quantity)</p>
+            <a asp-page="/Order/Checkout" class="btn btn-dark btn-lg rounded-0">Оформить заказ</a>
+        </div>
+    }
+</div>
+
+
+@* <div class="container my-4">
     <h2 class="text-center mb-4">Корзина</h2>
 
     @if (Model.CartItems == null || !Model.CartItems.Any())
@@ -51,4 +97,4 @@
             <a asp-page="/Checkout/Index" class="btn btn-dark btn-lg rounded-0">Оформить заказ</a>
         </div>
     }
-</div>
+</div> *@

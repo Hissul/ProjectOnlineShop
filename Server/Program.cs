@@ -21,6 +21,15 @@ byte[] key = Encoding.UTF8.GetBytes (keyString);
 builder.Services.AddScoped<AuthService> ();
 builder.Services.AddScoped<StoreService> ();
 builder.Services.AddScoped<CartService> ();
+builder.Services.AddScoped<OrderService> ();
+
+builder.Services.AddCors (options => {
+    options.AddPolicy ("AllowAll",
+        policy => policy
+            .AllowAnyOrigin ()
+            .AllowAnyMethod ()
+            .AllowAnyHeader ());            
+});
 
 builder.Services.AddDbContext<ApplicationDbContext> (options => options.UseSqlServer (connectionString));
 
@@ -69,12 +78,14 @@ WebApplication app = builder.Build();
 //    dbContext.Database.EnsureCreated (); // Создает базу данных заново
 //}
 
+app.UseCors ("AllowAll");
 
-
-using (IServiceScope scope = app.Services.CreateScope ()) {
-    IServiceProvider services = scope.ServiceProvider;
-    await CreateRole (services);
-}
+//using (IServiceScope scope = app.Services.CreateScope ()) {
+//    IServiceProvider services = scope.ServiceProvider;
+//    await CreateRole (services);
+//}
+await using var scope = app.Services.CreateAsyncScope ();
+await CreateRole (scope.ServiceProvider);
 
 
 app.UseAuthentication ();

@@ -16,7 +16,7 @@ namespace Client.Pages.Cart
         }
 
         [BindProperty]
-        public List<ItemInCart>? CartItems { get; set; }
+        public List<ItemInCartModel>? CartItems { get; set; }
 
         public async Task<IActionResult> OnGetAsync(){
 

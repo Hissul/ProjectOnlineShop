@@ -9,8 +9,8 @@ public class StoreService {
     private readonly HttpClient _httpClient;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public StoreService (HttpClient httpClient, IHttpContextAccessor httpContextAccessor) {
-        _httpClient = httpClient;
+    public StoreService (IHttpClientFactory clientFactory, IHttpContextAccessor httpContextAccessor) {
+        _httpClient = clientFactory.CreateClient("ApiClient");
         _httpContextAccessor = httpContextAccessor;
     }
 

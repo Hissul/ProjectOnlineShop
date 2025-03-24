@@ -39,6 +39,8 @@ public class AuthService {
         if (!result.Succeeded)
             return null;
 
+        // LOGER
+
         string token = GenerateJwtToken (user);
 
         IList<string> roles = await _userManager.GetRolesAsync (user);
@@ -50,6 +52,8 @@ public class AuthService {
             Token = token, 
             Roles = roles 
         };
+
+        // LOGER
 
         return userModel;
     }
@@ -75,6 +79,8 @@ public class AuthService {
             expires: DateTime.UtcNow.AddHours (1),
             signingCredentials: new SigningCredentials (new SymmetricSecurityKey (key), SecurityAlgorithms.HmacSha256));
 
+        // LOGER
+
         return new JwtSecurityTokenHandler ().WriteToken (token);
     }
 
@@ -97,6 +103,8 @@ public class AuthService {
                 await _roleManager.CreateAsync (new IdentityRole ("User"));
 
             await _userManager.AddToRoleAsync (user, "User");
+
+            // LOGER
         }
 
         return result;
@@ -104,6 +112,8 @@ public class AuthService {
 
     public async Task LogoutAsync () {
         await _signInManager.SignOutAsync ();
+
+        // LOGER
     }
 
 }

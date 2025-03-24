@@ -4,24 +4,24 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Client.Pages.Cart
 {
-    public class AddModel : PageModel
+    public class RemoveModel : PageModel
     {
         private readonly CartService _cartService;
         private readonly IHttpContextAccessor _contextAccessor;
 
-        public AddModel (CartService cartService, IHttpContextAccessor contextAccessor) {
+        public RemoveModel (CartService cartService, IHttpContextAccessor contextAccessor) {
             _cartService = cartService;
             _contextAccessor = contextAccessor;
         }
 
-        public async Task<IActionResult> OnGetAsync(int productId){
-            string? userId = _contextAccessor.HttpContext.Session.GetString("user_id");
+        public async Task<IActionResult> OnGet(int productId){
+            string? userId = _contextAccessor.HttpContext.Session.GetString ("user_id");
 
-            if(userId == null) {
+            if (userId == null) {
                 return RedirectToPage ("/Auth/Login");
             }
 
-            bool result = await _cartService.AddToCartAsync (userId, productId);
+            await _cartService.RemoveProductFromCartAsync (userId, productId);
             return RedirectToPage ("UserCart");
         }
     }

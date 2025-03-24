@@ -1,6 +1,6 @@
 @Server_HostAddress = http://localhost:5242
 
-
+# пецхярпюжхъ
 POST {{Server_HostAddress}}/auth/register
 Content-Type: application/json
 {
@@ -12,6 +12,7 @@ Content-Type: application/json
 
 ###
 
+# кнцхм
 POST {{Server_HostAddress}}/auth/login
 Content-Type: application/json
 {
@@ -22,6 +23,7 @@ Content-Type: application/json
 
 ###
 
+# кнцюср
 POST {{Server_HostAddress}}/auth/logout
 Content-Type: application/json
 {
@@ -31,6 +33,7 @@ Content-Type: application/json
 
 ###
 
+# яохянй рнбюпнб
 GET {{Server_HostAddress}}/store/all
 Content-Type: application/json
 {
@@ -38,6 +41,7 @@ Content-Type: application/json
 
 ###
 
+# тск хмтю н рнбюпе
 GET {{Server_HostAddress}}/store/full_info/6
 Content-Type: application/json
 {
@@ -45,6 +49,7 @@ Content-Type: application/json
 
 ###
 
+# днаюбкемхе б йнпгхмс
 POST {{Server_HostAddress}}/cart/add
 Content-Type: application/json
 {
@@ -55,7 +60,33 @@ Content-Type: application/json
 
 ###
 
-GET {{Server_HostAddress}}/cart/user_cart/8f6075b6-25d8-4af5-93e1-33956c53a2de
+# онксвемхе йнпгхмш онкэгнбюрекъ
+GET {{Server_HostAddress}}/cart/user_cart/b5a59bdf-2cdb-42a2-b8a3-bfbf18729b43
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiNWE1OWJkZi0yY2RiLTQyYTItYjhhMy1iZmJmMTg3MjliNDMiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJqdGkiOiI1Y2Q0Y2Y3ZS03Nzc5LTQwMTctYWMwZi0yNTM4MTFhNjMwOGMiLCJleHAiOjE3NDIyMDU4MjYsImlzcyI6InlvdXJfaXNzdWVyIiwiYXVkIjoieW91cl9hdWRpZW5jZSJ9.7zWWCB4LYA9wQ6dzlbeo0joNQ917U8XL1Ujy0cb_QSI
+Content-Type: application/json
+{
+}
+
+###
+
+# нтнплкемхе гюйюгю
+GET {{Server_HostAddress}}/order/create/b5a59bdf-2cdb-42a2-b8a3-bfbf18729b43
+Content-Type: application/json
+{
+}
+
+###
+
+# яохянй бяеу гюйюгнб онкэгнбюрекъ
+GET {{Server_HostAddress}}/order/all/b5a59bdf-2cdb-42a2-b8a3-bfbf18729b43
+Content-Type: application/json
+{
+}
+
+###
+
+#  тскк хмтю н гюйюге
+GET {{Server_HostAddress}}/order/info/1
 Content-Type: application/json
 {
 }

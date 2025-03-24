@@ -17,12 +17,16 @@
                     @foreach (var product in Model.Products)
                     {
                         <div class="col-md-4 mb-5">
-                            <div class="card border-0 shadow-sm rounded-0">
+                            <div class="card border-1 shadow-sm rounded-0" style="transition: transform 0.3s ease-in-out;"
+                                 onmouseover="this.style.transform='scale(1.1)'"
+                                 onmouseout="this.style.transform='scale(1)'">
 
                                 <div class="position-relative">
                                     <a asp-page="/Store/Details" asp-route-productId="@product.Id">
                                         <img src="data:image/jpeg;base64,@Convert.ToBase64String(product.Image)"
-                                             class="card-img-top rounded-0" alt="@product.Name">
+                                             class="card-img-top rounded-0"
+                                             alt="@product.Name"
+                                             style="width: 100%; height: 350px; object-fit: cover;">
                                     </a>
 
                                     @if(product.StockQuantity > 0 ){
@@ -39,7 +43,7 @@
                                     @*    <p class="text-muted">Размер картины <span class="border border-success text-success px-2 py-1 rounded">@product.Size</span></p> *@
 
 
-                                    <p class="fs-4 fw-bold">@product.Price руб.</p>
+                                    <p class="fs-4 fw-bold">@product.Price $</p>
 
                                     <a asp-page="/Cart/Add" asp-route-productId="@product.Id"
                                        class="btn btn-dark w-100 rounded-0">ЗАКАЗАТЬ КАРТИНУ</a>

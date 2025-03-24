@@ -1,0 +1,49 @@
+﻿@page
+@model Client.Pages.Order.DetailsModel
+
+@{
+
+}
+
+<div class="container text-center">
+    <div class="row align-items-center">
+        <div class="col">
+        </div>
+
+        <div class="col-10">
+            <h2>Детали заказа</h2>
+
+            <p><strong>Дата заказа :</strong> @Model.OrderModel.OrderedDate.ToString("g")</p>
+            <p><strong>Статус заказа :</strong> @Model.OrderModel.Status</p>
+            <p><strong>Общая сумма :</strong> $@Model.OrderModel.TotalAmount</p>
+
+            <h3>Items:</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="body">Product</th>
+                        <th class="body">Quantity</th>
+                        <th class="body">Price</th>
+                        <th class="body">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OrderModel.ItemModels)
+                    {
+                        <tr>
+                            <td class="body">@item.Product.Name</td>
+                            <td class="body">@item.Quantity</td>
+                            <td class="body">$@item.Price</td>
+                            <td class="body">$@(item.Price * item.Quantity)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <a asp-page="/Order/UserOrders" class="btn btn-secondary  my-btn">Вернуться к заказам</a>
+        </div>
+
+        <div class="col">
+        </div>
+    </div>
+</div>

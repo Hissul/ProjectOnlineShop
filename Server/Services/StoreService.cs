@@ -28,6 +28,8 @@ public class StoreService {
                 Image = p.Image,
             }).ToListAsync ();
 
+        // LOGER
+
         return res;
     }
 
@@ -53,6 +55,8 @@ public class StoreService {
                Size = p.ProductInfo != null ? $"{p.ProductInfo.Wight} × {p.ProductInfo.Height}" : "Не указано",
                Year = p.ProductInfo != null ? p.ProductInfo.Year : 0
            }).FirstOrDefaultAsync ();
+
+        // LOGER
 
         return product;
     }
