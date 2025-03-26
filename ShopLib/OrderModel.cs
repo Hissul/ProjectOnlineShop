@@ -11,7 +11,8 @@ public class OrderModel {
     public decimal TotalAmount { get; set; }
     public string Status { get; set; }
 
-    public ICollection<OrderItemModel> ItemModels { get; set; } = [];
+    public ICollection<OrderItemModel> ItemModels { get; set; } = 
+        [];
 
     public static implicit operator List<object> (OrderModel? v) {
         throw new NotImplementedException ();

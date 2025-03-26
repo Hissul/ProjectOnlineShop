@@ -21,6 +21,7 @@
             <table class="table">
                 <thead>
                     <tr>
+                        <th></th>
                         <th class="body">Product</th>
                         <th class="body">Quantity</th>
                         <th class="body">Price</th>
@@ -30,7 +31,9 @@
                 <tbody>
                     @foreach (var item in Model.OrderModel.ItemModels)
                     {
-                        <tr>
+                        <tr class="clickable-row"
+                            onclick="window.location.href='@Url.Page("/Store/Details", new { productId = item.Product.Id })'">
+                            <td><img src="data:image/jpeg;base64,@Convert.ToBase64String(item.Product.Image)" alt="@item.Product.Name" class="img-thumbnail rounded-0 border-0" style="width: 50px; height: 70px; object-fit: cover;"></td>
                             <td class="body">@item.Product.Name</td>
                             <td class="body">@item.Quantity</td>
                             <td class="body">$@item.Price</td>
@@ -40,7 +43,7 @@
                 </tbody>
             </table>
 
-            <a asp-page="/Order/UserOrders" class="btn btn-secondary  my-btn">Вернуться к заказам</a>
+            <a asp-page="/Order/UserOrders" class="btn btn-dark btn-lg rounded-0 w-50">Вернуться к заказам</a>
         </div>
 
         <div class="col">

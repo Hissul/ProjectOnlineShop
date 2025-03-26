@@ -84,29 +84,30 @@ public class OrderService {
     public async Task<OrderModel?> GetOrderFullInfoAsync(int orderId) {
 
         OrderModel? order = await _context.Orders
-            .Include (o => o.OrderItems)
-            .ThenInclude (oi => oi.Product)
-            .Select (o => new OrderModel {
-                Id = orderId,
-                OrderedDate = o.OrderedDate,
-                TotalAmount = o.TotalAmount,
-                Status = o.Status,
-                ItemModels = o.OrderItems.Select (o => new OrderItemModel {
-                    Quantity = o.Quantity,
-                    Price = o.Price,
-                    OrderId = orderId,
-                    ProductId = o.ProductId,
-                    Product = new ProductShortModel {
-                        Id = o.Product.Id,
-                        Name = o.Product.Name,
-                        Description = o.Product.Description,
-                        Price = o.Product.Price,
-                        StockQuantity = o.Product.StockQuantity,
-                        Image = o.Product.Image,
-                    }
-                }).ToList ()
-            })
-            .FirstOrDefaultAsync (o => o.Id == orderId);
+       .Where (o => o.Id == orderId) // Сначала фильтруем по Id
+       .Include (o => o.OrderItems)
+       .ThenInclude (oi => oi.Product)
+       .Select (o => new OrderModel {
+           Id = o.Id, // Берем ID из базы
+           OrderedDate = o.OrderedDate,
+           TotalAmount = o.TotalAmount,
+           Status = o.Status,
+           ItemModels = o.OrderItems.Select (oi => new OrderItemModel {
+               Quantity = oi.Quantity,
+               Price = oi.Price,
+               OrderId = oi.OrderId,
+               ProductId = oi.ProductId,
+               Product = new ProductShortModel {
+                   Id = oi.Product.Id,
+                   Name = oi.Product.Name,
+                   Description = oi.Product.Description,
+                   Price = oi.Product.Price,
+                   StockQuantity = oi.Product.StockQuantity,
+                   Image = oi.Product.Image,
+               }
+           }).ToList ()
+       })
+       .FirstOrDefaultAsync ();
 
         return order;
     }
