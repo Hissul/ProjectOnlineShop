@@ -35,6 +35,28 @@ public class StoreService {
         }        
     }
 
+    // получение списка картин (фул инфа)
+    public async Task<List<ProductFullModel>?> GetAllProductFullAsync () {
+
+        try {
+            HttpResponseMessage response = await _httpClient.GetAsync ("store/all_full");
+
+            if (response.IsSuccessStatusCode) {
+                List<ProductFullModel>? products = await response.Content.ReadFromJsonAsync<List<ProductFullModel>> ();
+                return products;
+            }
+            else {
+                throw new Exception ("Failed to load products from server.");
+            }
+
+        }
+        catch (Exception ex) {
+            Console.WriteLine ($"Error: {ex.Message}");
+            return null;
+        }
+
+    }
+
 
     // фуловая информация о картине
     public async Task<ProductFullModel?> GetFullProductAsync (int id) {

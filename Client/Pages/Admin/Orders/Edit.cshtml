@@ -1,0 +1,98 @@
+﻿@page
+@model Client.Pages.Admin.Orders.EditModel
+
+@{
+
+}
+
+<div class="container text-center">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10">
+            <div class="card my-3 rounded-0 mt-5 shadow">
+                <div class="card-header order-table">
+                    <form method="post" class="w-100">
+                        <!-- Скрытый инпут для возврата на предыдущую страницу -->
+                        <input type="hidden" asp-for="ReturnUrl" value="@Model.ReturnUrl" />
+
+                        <table class="table table-borderless m-0 w-100">
+                            <thead>
+                                <tr>
+                                    <th class="body">Order ID</th>
+                                    <th class="body">User</th>
+                                    <th class="body">Date</th>
+                                    <th class="body">Status</th>
+                                    <th class="body">Total Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="body">
+                                        <input type="hidden" asp-for="Order.Id" />
+                                        @Model.Order.Id
+                                    </td>
+                                    <td class="body">@Model.Order.UserName (@Model.Order.UserEmail)</td>
+                                    <td class="body">@Model.Order.OrderedDate.ToString("g")</td>
+                                    <td class="body">
+                                        <select asp-for="Order.Status" class="form-control text-center">
+                                            <option value="Pending">Pending</option>
+                                            <option value="Processing">Processing</option>
+                                            <option value="Completed">Completed</option>
+                                            <option value="Cancelled">Cancelled</option>
+                                        </select>
+                                    </td>
+                                    <td class="body">@Model.Order.TotalAmount</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="card-body">
+                            @foreach (var item in Model.Order.ItemModels)
+                            {
+                                <div class="card mb-2 rounded-0">
+                                    <div class="row g-0 align-items-center">
+                                        <div class="col-md-2">
+                                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.Product.Image)"
+                                                 alt="@item.Product.Name"
+                                                 class="img-thumbnail rounded-0 border-0"
+                                                 style="width: 50px; height: 70px; object-fit: cover;">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card-body">
+                                                <h5 class="card-title">@item.Product.Name</h5>
+                                                <p class="card-text">
+                                                    <small class="text-muted">Price: @item.Price | Quantity: @item.Quantity</small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 text-center">
+                                            <p class="card-text">
+                                                <strong>Total:</strong> @(item.Price * item.Quantity)
+                                            </p>
+                                        </div>
+                                        <div class="col-md-2 text-center">
+                                            @if (Model.ReturnUrl == "/Admin/Orders/Pending" || Model.ReturnUrl == "/Admin/Orders/Processing")
+                                            {
+                                                <a asp-page="/Admin/Orders/RemoveOrderItem" 
+                                                asp-route-orderItemId="@item.Id"
+                                                asp-route-orderId="@Model.Order.Id"
+                                                asp-route-returnUrl="@Model.ReturnUrl"
+                                                class="btn btn-outline-danger">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                            }                                        
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="card-footer d-flex justify-content-around">
+                            <button type="submit" class="btn mx-1 btn-outline-dark rounded-0" style="width: 50%;">Save</button>
+                            <a asp-page="@Model.ReturnUrl" class="btn mx-1 btn-dark rounded-0" style="width: 50%;">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

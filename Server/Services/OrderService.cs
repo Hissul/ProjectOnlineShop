@@ -17,7 +17,7 @@ public class OrderService {
 
 
     /// <summary>
-    /// Оформление заказа
+    /// Оформление заказа / создание заказа
     /// </summary>
     public async Task<OrderModel> CreateOrderAsync (string userId) {
        Cart? cart = await _cartService.GetCartByUserId (userId);
@@ -63,7 +63,7 @@ public class OrderService {
     }
 
     /// <summary>
-    /// Получение всех заказов
+    /// Получение всех заказов (для юзера)
     /// </summary>
     public async Task<List<OrderModel>> GetUserOrdersAsync (string userId) {
 
@@ -81,18 +81,25 @@ public class OrderService {
     }
 
 
+    /// <summary>
+    /// Получение полной инфы о заказе (для юзера)
+    /// </summary>
     public async Task<OrderModel?> GetOrderFullInfoAsync(int orderId) {
 
         OrderModel? order = await _context.Orders
-       .Where (o => o.Id == orderId) // Сначала фильтруем по Id
+       .Where (o => o.Id == orderId) 
+       .Include(o => o.User)
        .Include (o => o.OrderItems)
        .ThenInclude (oi => oi.Product)
        .Select (o => new OrderModel {
-           Id = o.Id, // Берем ID из базы
+           Id = o.Id, 
            OrderedDate = o.OrderedDate,
            TotalAmount = o.TotalAmount,
            Status = o.Status,
+           UserName = o.User.FullName,
+           UserEmail = o.User.Email,
            ItemModels = o.OrderItems.Select (oi => new OrderItemModel {
+               Id = oi.Id,
                Quantity = oi.Quantity,
                Price = oi.Price,
                OrderId = oi.OrderId,
@@ -111,4 +118,82 @@ public class OrderService {
 
         return order;
     }
+
+
+    /// <summary>
+    /// Получение заказов (по статусу)
+    /// </summary>
+    public async Task<List<OrderModel>> GetOrdersByStatusAsync (string status) {
+
+        List<OrderModel> orders = await _context.Orders
+            .Where (o => o.Status == status)
+            .Include(o => o.User)
+            .Include (o => o.OrderItems)
+            .ThenInclude (oi => oi.Product)
+            .Select (o => new OrderModel { 
+                Id = o.Id,
+                OrderedDate = o.OrderedDate,
+                TotalAmount = o.TotalAmount,
+                Status = o.Status,
+                UserName = o.User.FullName,
+                UserEmail = o.User.Email,
+                ItemModels = o.OrderItems.Select(oi => new OrderItemModel {
+                    Id = oi.Id,
+                    Quantity = oi.Quantity,
+                    Price = oi.Price,
+                    OrderId = oi.OrderId,
+                    ProductId = oi.ProductId,
+                    Product = new ProductShortModel {
+                        Id = oi.Product.Id,
+                        Name = oi.Product.Name,
+                        Description = oi.Product.Description,
+                        Price = oi.Product.Price,
+                        StockQuantity = oi.Product.StockQuantity,
+                        Image = oi.Product.Image
+                    }
+                }).ToList ()
+            })
+            .ToListAsync ();
+
+        return orders;
+    }
+
+
+
+    ///// <summary>
+    ///// Получение заказа (по Id)
+    ///// </summary>
+    //public async Task<OrderModel> GetOrdersByIdAsync (string status) { 
+    
+    //}
+
+
+
+    /// <summary>
+    /// Изменение заказа
+    /// </summary>
+    public async Task EditOrderAsync (int orderId, string orderStatus) {
+
+        Order? order = await _context.Orders.FirstOrDefaultAsync (o => o.Id == orderId);
+
+        if(order != null) {
+            order.Status = orderStatus;
+            await _context.SaveChangesAsync ();
+        }
+    }
+
+
+    /// <summary>
+    /// Удаление заказа
+    /// </summary>
+    public async Task RemoveOrderItemAsync (int orderItemId) {
+
+        OrderItem? orderItem = await _context.OrderItems.FirstOrDefaultAsync (o => o.Id == orderItemId);
+        Console.WriteLine ($"\n\n\n\nO R D E R  I D  = {orderItem}  O R D E R  I T E M  ID = {orderItemId}\n\n\n\n\n ");
+        if (orderItem != null) { 
+            _context.OrderItems.Remove (orderItem);
+            await _context.SaveChangesAsync ();
+        }
+    }
+
 }

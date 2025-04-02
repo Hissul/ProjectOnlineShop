@@ -1,0 +1,84 @@
+﻿@page
+@model Client.Pages.Admin.Products.ChangeProductModel
+
+@{
+    ViewData["ActivePage"] = "ChangeProduct";
+}
+
+<div class="container text-center">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10">
+
+            @if (Model.Products == null || !Model.Products.Any())
+            {
+                <h2 class="text-center">Товаров не найдено</h2>
+            }
+            else
+            {
+                @foreach (var product in Model.Products)
+                {
+                    <div class="card my-3 rounded-0 mt-5 shadow ">                        
+                        <div class="card-body">
+                            <div class="card mb-2 rounded-0">
+                                <div class="row g-0 align-items-center">
+                                    <div class="col-md-4">
+                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(product.Image)"
+                                             alt="@product.Name"
+                                             class="img-thumbnail rounded-0 border-0"
+                                             style="width: 80%; height: 100%; object-fit: contain;">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card-body">
+                                            <h5 class="card-title">@product.Name</h5>
+                                            <p class="card-text">
+                                                <small class="text-muted">Price: @product.Price</small>
+                                            </p>
+                                            <p class="card-text">
+                                                <small class="text-muted">StockQuantity: @product.StockQuantity</small>
+                                            </p>
+                                            <p class="card-text">
+                                                <small class="text-muted">Description: @product.Description</small>
+                                            </p>
+                                            <p class="card-text">
+                                                <small class="text-muted">Technique: @product.Technique</small>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 ">                                        
+                                        <p class="card-text">
+                                            <small class="text-muted">Material: @product.Material</small>
+                                        </p>
+                                        <p class="card-text">
+                                            <small class="text-muted">Plot: @product.Plot</small>
+                                        </p>
+                                        <p class="card-text">
+                                            <small class="text-muted">Style: @product.Style</small>
+                                        </p>
+                                        <p class="card-text">
+                                            <small class="text-muted">Size: @product.Size</small>
+                                        </p>
+                                        <p class="card-text">
+                                            <small class="text-muted">Year: @product.Year</small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer d-flex justify-content-around">
+                            <a asp-page="/Admin/Products/EditProduct"
+                               asp-route-orderId="@product.Id"
+                               asp-route-returnUrl="@Url.ActionContext.HttpContext.Request.Path"
+                               class="btn mx-1 btn-outline-dark rounded-0"
+                               style="width: 50%;">Edit</a>
+
+                            <a asp-page="/Admin/Products/DeleteProduct"
+                               asp-route-id="@product.Id"
+                               class="btn btn-dark mx-1 rounded-0"
+                               style="width: 50%;">Delete</a>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

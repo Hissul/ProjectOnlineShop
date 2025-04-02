@@ -22,6 +22,12 @@ public class StoreController : Controller {
         return products;
     }
 
+    [HttpGet("all_full")]
+    public async Task<List<ProductFullModel>> GetAllProductFullAsync () {
+        var products = await productService.GetAllProductFullAsync ();
+        return products;
+    }
+
     [HttpGet("full_info/{id:int}")]
     public async Task<ProductFullModel?> GetFullProductAsync (int id) { // IActionResult ??!!
         ProductFullModel? product = await productService.GetProductFullAsync (id);

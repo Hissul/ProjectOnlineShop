@@ -23,7 +23,7 @@ namespace Client.Pages.Order
             }
 
             OrderModel? order = await orderService.CreateOrderAsync (userId);
-            return RedirectToPage ("/Order/Details");
+            return RedirectToPage ("/Order/UserOrders");
         }
     }
 }

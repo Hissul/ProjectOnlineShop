@@ -33,8 +33,18 @@ Content-Type: application/json
 
 ###
 
+
+
 # яохянй рнбюпнб
 GET {{Server_HostAddress}}/store/all
+Content-Type: application/json
+{
+}
+
+###
+
+# яохянй рнбюпнб (тск хмтю)
+GET {{Server_HostAddress}}/store/all_full
 Content-Type: application/json
 {
 }
@@ -48,6 +58,8 @@ Content-Type: application/json
 }
 
 ###
+
+
 
 # днаюбкемхе б йнпгхмс
 POST {{Server_HostAddress}}/cart/add
@@ -69,6 +81,8 @@ Content-Type: application/json
 
 ###
 
+
+
 # нтнплкемхе гюйюгю
 GET {{Server_HostAddress}}/order/create/b5a59bdf-2cdb-42a2-b8a3-bfbf18729b43
 Content-Type: application/json
@@ -89,6 +103,33 @@ Content-Type: application/json
 GET {{Server_HostAddress}}/order/info/1
 Content-Type: application/json
 {
+}
+
+###
+
+#  яохянй гюйюгнб бшанпйю он ярюрсяс
+GET {{Server_HostAddress}}/order/all_by_status/Pending
+Content-Type: application/json
+{
+}
+
+###
+
+# хглемемхе ярюрсяю гюйюгю
+POST {{Server_HostAddress}}/order/edit/1/Processing
+Content-Type: application/json
+{
+    "userId": "8f6075b6-25d8-4af5-93e1-33956c53a2de",
+    "productId": 12
+    
+}
+
+###
+
+# хглемемхе ярюрсяю гюйюгю
+DELETE {{Server_HostAddress}}/order/remove_order_item/9
+Content-Type: application/json
+{  
 }
 
 ###

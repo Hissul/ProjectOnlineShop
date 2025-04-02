@@ -5,16 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Admin</title>
     <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Client.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow for_header">
             <div class="container">
-
                 <a class="navbar-brand" asp-area="" asp-page="/Index">OnlineShop</a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -22,20 +21,43 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-
+@* 
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
 
                     <partial name="_LoginPartial" />
-                </div>
+                </div> *@
             </div>
         </nav>
     </header>
 
-    <div class="container">
+    <div class="container-fluid w-100 m-0">
         <div class="row">
-            <div class="col-2">ADMIN</div>
+            <!-- Панель навигации слева -->
+            <div class="col-2 sidebar">
+             
 
-            <div class=" col-10 container">
+                    <nav>
+                        <h6 class="mt-3  text-secondary">Статистика:</h6>
+                        <a asp-page="/Admin/Statistics/Statistic" class="@((ViewData["ActivePage"]?.ToString() == "Statistic") ? "active" : "")">Статистика</a>
+
+                        <h6 class="mt-3 text-secondary">Заказы:</h6>
+                        <a asp-page="/Admin/Orders/Pending" class="@((ViewData["ActivePage"]?.ToString() == "Pending") ? "active" : "")">Ожидают</a>
+                        <a asp-page="/Admin/Orders/Processing" class="@((ViewData["ActivePage"]?.ToString() == "Processing") ? "active" : "")">В процессе</a>
+                        <a asp-page="/Admin/Orders/Completed" class="@((ViewData["ActivePage"]?.ToString() == "Completed") ? "active" : "")">Завершенные</a>
+                        <a asp-page="/Admin/Orders/Cancelled" class="@((ViewData["ActivePage"]?.ToString() == "Cancelled") ? "active" : "")">Отмененные</a>
+
+                        <h6 class="mt-3  text-secondary">Продукты:</h6>
+                        <a asp-page="/Admin/Products/ChangeProduct" class="@((ViewData["ActivePage"]?.ToString() == "ChangeProduct") ? "active" : "")">Продукты</a>
+                        <a asp-page="/Admin/Products/AddProduct" class="@((ViewData["ActivePage"]?.ToString() == "AddProduct") ? "active" : "")">Добавить продукт</a>
+                     
+
+                        <h6 class="mt-3  text-secondary">Пользователи:</h6>
+                        <a asp-page="/Admin/Users/ChangeUser" class="@((ViewData["ActivePage"]?.ToString() == "ChangeUser") ? "active" : "")">Изменить пользователя</a>
+                    </nav>
+                
+            </div>
+
+            <div class="col-10">
                 <main role="main" class="pb-3">
                     @RenderBody()
                 </main>

@@ -86,4 +86,71 @@ public class OrderService {
     }
 
 
+    // список заказов ( выборка по статусу )
+    public async Task<List<OrderModel>?> GetOrdersByStatusAsync(string status) {
+
+        List<OrderModel>? orders = null;
+        HttpRequestMessage request = new HttpRequestMessage (HttpMethod.Get, $"/order/all_by_status/{status}");
+
+        try {
+            HttpResponseMessage response = await _httpClient.SendAsync (request);
+
+            if (response.IsSuccessStatusCode) {
+                orders = await response.Content.ReadFromJsonAsync<List<OrderModel>> ();
+                return orders;
+            }
+            else {
+                throw new Exception ($"Failed to get orders with status {status}");
+            }
+        }
+        catch (Exception ex) {
+            Console.WriteLine ($"Error: {ex.Message}");
+            return orders;
+        }
+    }
+
+
+    // изменение заказа
+    public async Task<bool> EditOrderAsync (int orderId, string orderStatus) {
+
+        HttpRequestMessage request = new HttpRequestMessage (HttpMethod.Post, $"/order/edit/{orderId}/{orderStatus}");
+
+        try {
+            HttpResponseMessage response = await _httpClient.SendAsync (request);
+
+            if (response.IsSuccessStatusCode) { 
+                return true;
+            }
+
+            return false;
+        }
+        catch (Exception ex) { 
+            Console.WriteLine (ex.Message); 
+            return false;
+        }
+    }
+
+    // удаление позиции товара из заказа
+    public async Task<bool> RemoveOrderItemAsync (int orderItemId) {
+
+        HttpRequestMessage request = new HttpRequestMessage (HttpMethod.Delete, $"/order/remove_order_item/{orderItemId}");
+
+        try {
+            HttpResponseMessage response = await _httpClient.SendAsync (request);
+
+            if (response.IsSuccessStatusCode) {
+                return true;
+            }
+
+            return false;
+        }
+        catch (Exception ex) {
+            Console.WriteLine (ex.Message);
+            return false;
+        }
+
+    }
+
+
+
 }

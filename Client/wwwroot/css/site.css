@@ -75,3 +75,50 @@ a.body {
     vertical-align: middle !important;
     text-align: center;
 }
+
+
+.for_header {
+    background-color: #1e2124 !important;   
+}
+.for_header a {    
+    color: white !important;
+}
+
+
+.sidebar {
+    background-color: #1e2124;
+    height: 100vh;
+    padding-top: 20px;
+}
+
+
+
+    /* Стили для ссылок */
+    .sidebar a {
+        display: block;
+        padding: 10px 20px;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+        /* Цвет ссылки по умолчанию */
+        .sidebar a:hover {
+            background-color: #495057; /* Слегка светлее при наведении */
+        }
+
+        /* Стили для активной вкладки */
+        .sidebar a.active {
+            background-color: #6c757d; /* Цвет активной вкладки, немного светлее фона */
+        }
+
+
+
+.order-table, .card-header {
+    background-color: #f8f9fa !important; /* Цвет как у card-header */
+    color: #212529; /* Цвет текста */
+}
+
+
+

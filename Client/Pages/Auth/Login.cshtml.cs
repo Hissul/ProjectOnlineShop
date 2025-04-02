@@ -38,7 +38,7 @@ namespace Client.Pages.Auth
             HttpContext.Session.SetString ("user_role", string.Join (",", authResponse.Roles));
 
             if (authResponse.Roles.Contains ("Admin")) {
-                return RedirectToPage ("/Admin/Dashboard");
+                return RedirectToPage ("/Admin/Statistics/Statistic");
             }
            
 
