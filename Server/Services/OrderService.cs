@@ -8,10 +8,12 @@ namespace Server.Services;
 public class OrderService {
 
     private readonly CartService _cartService;
+    private readonly ProductService _productService;
     private readonly ApplicationDbContext _context;
 
-    public OrderService (CartService cartService, ApplicationDbContext context) {
+    public OrderService (CartService cartService, ProductService productService, ApplicationDbContext context) {
         _cartService = cartService;
+        _productService = productService;
         _context = context;
     }
 
@@ -30,15 +32,20 @@ public class OrderService {
             UserId = userId,
             OrderedDate = DateTime.Now,
             TotalAmount = cart.Items.Sum (i => i.Product.Price * i.Quantity),
-            OrderItems = cart.Items.Select (i => new OrderItem {
+            OrderItems = cart.Items.Select (i => new OrderItem {               
                 ProductId = i.ProductId,
                 Quantity = i.Quantity,
-                Price = i.Product.Price,
+                Price = i.Product.Price                
             }).ToList ()
-        };
+        };      
 
         _context.Orders.Add (order);
         await _context.SaveChangesAsync ();
+
+        // уменьшаем количество продукта
+        foreach (OrderItem orderItem in order.OrderItems) {
+            await _productService.ChangeQuantity (orderItem.ProductId, orderItem.Quantity);
+        }
 
         // LOGER
 

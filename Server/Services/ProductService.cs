@@ -1,4 +1,5 @@
 ﻿using Server.Data;
+using Server.Data.Entities;
 using ShopLib;
 
 namespace Server.Services;
@@ -11,6 +12,19 @@ public class ProductService {
         _context = context;
     }
 
+
+    /// <summary>
+    /// Изменение количества продукта при заказе
+    /// </summary>
+    public async Task ChangeQuantity (int productId, int quantity) {
+        Product? product = await _context.Products.FindAsync (productId);
+
+        if (product != null && product.StockQuantity > 0) {
+            product.StockQuantity -= quantity;
+
+            await _context.SaveChangesAsync ();
+        }        
+    }
 
     /// <summary>
     /// Добавление нового продукта
