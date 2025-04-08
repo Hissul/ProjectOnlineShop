@@ -13,6 +13,9 @@ public class OrderModel {
     public string UserName { get; set; }
     public string UserEmail { get; set; }
 
+    public string PhoneNumber { get; set; }
+    public string DeliveryAddress { get; set; }
+
     public ICollection<OrderItemModel> ItemModels { get; set; } = 
         [];
 

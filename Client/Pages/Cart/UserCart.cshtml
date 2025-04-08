@@ -6,6 +6,7 @@
 }
 
 
+
 <div class="container my-4">
     <h2 class="text-center mb-4">Корзина</h2>
 
@@ -43,58 +44,52 @@
             }
         </div>
 
-        <div class="text-end me-5">
-            <p class="fs-5 fw-bold">Общая стоимость: $@Model.CartItems.Sum(i => i.Product.Price * i.Quantity)</p>
-            <a asp-page="/Order/Checkout" class="btn btn-dark btn-lg rounded-0">Оформить заказ</a>
+        <div class="row align-items-center">
+            <div class="col-md-8 text-center">
+            </div>
+
+            <div class="col-md-4 text-center ">
+                <p class="fs-5 fw-bold">Общая стоимость: $@Model.CartItems.Sum(i => i.Product.Price * i.Quantity)</p>
+                <!-- Блок для ввода телефона и адреса -->
+                @if (Model.Phone == "" && Model.Address == "")
+                {                    
+                    <div class="text-end me-5 mb-5">
+                        <h6>Заполните для оформления заказа</h6>
+                        <form method="post">
+                            <div class="mb-3">
+                                <label for="Phone" asp-for="@Model.Phone" class="form-label">Телефон</label>
+                                <input type="text" asp-for="@Model.Phone" class="form-control rounded-0" id="Phone" name="Phone" value="@Model.Phone" required>
+                                <span asp-validation-for="@Model.Phone" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label for="Address" class="form-label">Адрес</label>
+                                <input type="text" class="form-control rounded-0" id="Address" name="Address" value="@Model.Address" required>
+                            </div>
+                            <button type="submit" class="btn btn-outline-dark rounded-0">Сохранить данные</button>
+                        </form>
+                    </div>
+                }
+           
+
+                <!-- Блок с общей стоимостью и кнопкой оформления заказа -->
+                <div class="text-end me-5">
+                                      
+                    @if (Model.Phone != "" && Model.Address != "")
+                    {
+                        <a id="checkoutButton"
+                           asp-page="/Order/Checkout"
+                           asp-route-phone="@Model.Phone"
+                           asp-route-address="@Model.Address"
+                           class="btn btn-dark btn-lg rounded-0"
+                           disabled>
+                            Оформить заказ
+                        </a>
+                    }
+                    
+                </div>
+            </div>
         </div>
     }
 </div>
 
 
-@* <div class="container my-4">
-    <h2 class="text-center mb-4">Корзина</h2>
-
-    @if (Model.CartItems == null || !Model.CartItems.Any())
-    {
-        <p class="text-center">Корзина пуста.</p>
-    }
-    else
-    {
-        <div class="table-responsive">
-            <table class="table text-center align-middle">
-                <thead class="table-dark">
-                    <tr>
-                        <th></th>
-                        <th>Название</th>
-                        <th>Количество</th>
-                        <th>Цена</th>
-                        <th>Итого</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.CartItems)
-                    {
-                        <tr>
-                            <td>
-                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.Product.Image)" alt="@item.Product.Name" class="img-thumbnail" style="width: 80px; height: 80px;">
-                            </td>
-                            <td>@item.Product.Name</td>
-                            <td>@item.Quantity</td>
-                            <td>$@item.Product.Price</td>
-                            <td>$@(item.Product.Price * item.Quantity)</td>
-                            <td>
-                                <a asp-page="/Cart/Remove" asp-route-productId="@item.Product.Id" class="btn btn-outline-dark rounded-0">Удалить</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-
-        <div class="text-end me-5">
-            <p class="fs-5 fw-bold">Общая стоимость: $@Model.CartItems.Sum(i => i.Product.Price * i.Quantity)</p>
-            <a asp-page="/Checkout/Index" class="btn btn-dark btn-lg rounded-0">Оформить заказ</a>
-        </div>
-    }
-</div> *@

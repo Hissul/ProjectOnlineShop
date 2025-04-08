@@ -6,6 +6,9 @@ public class Order {
     public decimal TotalAmount { get; set; }
     public string Status { get; set; } = "Pending";
 
+    public string? PhoneNumber { get; set; }
+    public string? DeliveryAddress { get; set; }
+
     public string UserId { get; set; }
     public ApplicationUser User { get; set; } = null!;
 

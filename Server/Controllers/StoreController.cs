@@ -17,7 +17,7 @@ public class StoreController : Controller {
 
 
     [HttpGet ("all")]
-    public async Task<List<ProductShortModel>> GetAllProductAsync () { // IActionResult ??!!
+    public async Task<List<ProductShortModel>> GetAllProductAsync () { 
         List<ProductShortModel> products = await productService.GetAllProductAsync ();
         return products;
     }
@@ -29,7 +29,7 @@ public class StoreController : Controller {
     }
 
     [HttpGet("full_info/{id:int}")]
-    public async Task<ProductFullModel?> GetFullProductAsync (int id) { // IActionResult ??!!
+    public async Task<ProductFullModel?> GetFullProductAsync (int id) { 
         ProductFullModel? product = await productService.GetProductFullAsync (id);
         return product;
     }

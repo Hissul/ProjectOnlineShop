@@ -20,26 +20,22 @@
                 {
                     <div class="card my-3 rounded-0 mt-5 shadow ">
                         <div class="card-header order-table">
-                            <table class="table table-borderless m-0 w-100">
-                                <thead>
-                                    <tr>
-                                        <th class="body">Order ID</th>
-                                        <th class="body">User</th>
-                                        <th class="body">Date</th>
-                                        <th class="body">Status</th>
-                                        <th class="body">Total Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="body">@order.Id</td>
-                                        <td class="body">@order.UserName (@order.UserEmail)</td>
-                                        <td class="body">@order.OrderedDate.ToString("g")</td>
-                                        <td class="body">@order.Status</td>
-                                        <td class="body">@order.TotalAmount</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="d-flex justify-content-between flex-wrap">
+                                <!-- Левая колонка -->
+                                <div class="p-2 w-50">
+                                    <div><strong>Order ID:</strong> @order.Id</div>
+                                    <div><strong>User:</strong> @order.UserName (@order.UserEmail)</div>
+                                    <div><strong>Address:</strong> @order.DeliveryAddress</div>
+                                    <div><strong>Phone:</strong> @order.PhoneNumber</div>
+                                </div>
+
+                                <!-- Правая колонка -->
+                                <div class="p-2 w-50">                                      
+                                    <div><strong>Date:</strong> @order.OrderedDate.ToString("g")</div>
+                                    <div><strong>Total Amount:</strong> @order.TotalAmount</div>
+                                    <div><strong>Status:</strong> @order.Status</div>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             @foreach (var item in order.ItemModels)

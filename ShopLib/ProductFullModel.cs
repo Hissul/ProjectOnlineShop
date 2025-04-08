@@ -12,4 +12,6 @@ public class ProductFullModel : ProductShortModel {
     public string Style { get; set; }
     public string Size { get; set; }
     public int Year { get; set; }
+    public int Wight { get; set; }
+    public int Height { get; set; }
 }

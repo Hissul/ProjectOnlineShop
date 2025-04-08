@@ -14,7 +14,7 @@ namespace Client.Pages.Admin.Orders
 
         public async Task<IActionResult> OnGetAsync(int orderItemId, int orderId, string? returnUrl) {
 
-            bool result = await _orderService.RemoveOrderItemAsync(orderItemId);
+            bool result = await _orderService.RemoveOrderItemAsync(orderItemId , orderId);
 
             return RedirectToPage ("/Admin/Orders/Edit", new { orderId, returnUrl });
             //return RedirectToPage (returnUrl);

@@ -21,10 +21,8 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-         
 
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
-              
                     <partial name="_LoginPartial" />
                 </div>
             </div>
@@ -42,10 +40,14 @@
         </div>
     </footer>
 
+    <!-- Подключаем jQuery и Bootstrap -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Подключаем ваш внешний файл JavaScript (site.js) -->
     <script src="~/js/site.js" asp-append-version="true"></script>
 
+    <!-- Рендерим дополнительные скрипты, если они есть -->
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

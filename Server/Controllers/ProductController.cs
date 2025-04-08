@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using Server.Services;
 using ShopLib;
@@ -19,14 +20,22 @@ public class ProductController : Controller {
 
 
     [HttpPost("add")]
-    public async Task AddProductAsync ([FromBody]ProductFullModel productFullModel) {
+    public async Task<IActionResult> AddProductAsync ([FromBody]ProductFullModel productFullModel) {
 
+        if (!ModelState.IsValid) {
+            return BadRequest (ModelState);
+        }
+
+        await _productService.AddProductAsync(productFullModel);
+        return Ok (new { message = "Товар добавлен!" });
     }
 
 
-    [HttpPost("change")]
-    public async Task ChangeProductAsync ([FromBody] ProductFullModel productFullModel) {
+    [HttpPost("edit")]
+    public async Task<IActionResult> EditProductAsync ([FromBody] ProductFullModel productFullModel) {
 
+        await _productService.EditProductAsync(productFullModel);
+        return Ok(new { message = "Товар изменен!" });
     }
 
 

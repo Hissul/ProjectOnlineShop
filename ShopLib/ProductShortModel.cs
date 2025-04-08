@@ -12,4 +12,6 @@ public class ProductShortModel {
     public decimal Price { get; set; }
     public int StockQuantity { get; set; }
     public byte[] Image { get; set; }
+
+    public int? Reserve { get; set; }
 }

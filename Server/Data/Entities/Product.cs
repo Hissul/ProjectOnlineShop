@@ -9,5 +9,8 @@ public class Product {
     public int StockQuantity { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 
+    public int? Reserve { get; set; }
+
+
     public ProductInfo ProductInfo { get; set; } = null!;
 }

@@ -77,11 +77,14 @@ public class StoreService {
                Price = p.Price,
                StockQuantity = p.StockQuantity,
                Image = p.Image,
+               Reserve = p.Reserve,
                Technique = p.ProductInfo != null ? p.ProductInfo.Technique : "Не указано",
                Material = p.ProductInfo != null ? p.ProductInfo.Material : "Не указано",
                Plot = p.ProductInfo != null ? p.ProductInfo.Plot : "Не указано",
                Style = p.ProductInfo != null ? p.ProductInfo.Style : "Не указано",
                Size = p.ProductInfo != null ? $"{p.ProductInfo.Wight} × {p.ProductInfo.Height}" : "Не указано",
+               Wight = p.ProductInfo != null ? p.ProductInfo.Wight : 0,
+               Height = p.ProductInfo != null ? p.ProductInfo.Height : 0,
                Year = p.ProductInfo != null ? p.ProductInfo.Year : 0
            }).FirstOrDefaultAsync ();
 

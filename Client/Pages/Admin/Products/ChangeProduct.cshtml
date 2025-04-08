@@ -52,6 +52,9 @@
                                             <small class="text-muted">Plot: @product.Plot</small>
                                         </p>
                                         <p class="card-text">
+                                            <small class="text-muted">Reserve: @(product.Reserve ?? 0)</small>
+                                        </p>
+                                        <p class="card-text">
                                             <small class="text-muted">Style: @product.Style</small>
                                         </p>
                                         <p class="card-text">
@@ -66,15 +69,19 @@
                         </div>
                         <div class="card-footer d-flex justify-content-around">
                             <a asp-page="/Admin/Products/EditProduct"
-                               asp-route-orderId="@product.Id"
+                               asp-route-productId="@product.Id"
                                asp-route-returnUrl="@Url.ActionContext.HttpContext.Request.Path"
                                class="btn mx-1 btn-outline-dark rounded-0"
-                               style="width: 50%;">Edit</a>
+                               style="width: 50%;">
+                               Edit
+                           </a>
 
                             <a asp-page="/Admin/Products/DeleteProduct"
                                asp-route-id="@product.Id"
                                class="btn btn-dark mx-1 rounded-0"
-                               style="width: 50%;">Delete</a>
+                               style="width: 50%;">
+                               Delete
+                           </a>
                         </div>
                     </div>
                 }

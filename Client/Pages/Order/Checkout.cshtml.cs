@@ -15,14 +15,14 @@ namespace Client.Pages.Order
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<IActionResult> OnGet(){
+        public async Task<IActionResult> OnGet(string phone, string address) {
             string? userId = httpContextAccessor.HttpContext.Session.GetString("user_id");
 
             if (userId == null) {
                 return RedirectToPage ("/Auth/Login");
             }
 
-            OrderModel? order = await orderService.CreateOrderAsync (userId);
+            OrderModel? order = await orderService.CreateOrderAsync (userId, phone, address);
             return RedirectToPage ("/Order/UserOrders");
         }
     }

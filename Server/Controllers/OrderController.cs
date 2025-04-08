@@ -16,9 +16,9 @@ public class OrderController : Controller {
     }
 
 
-    [HttpGet ("create/{userId}")]
-    public async Task<IActionResult> CreateOrderAsync (string userId) {
-        OrderModel order = await orderService.CreateOrderAsync (userId);
+    [HttpGet ("create/{userId}/{phone}/{address}")]
+    public async Task<IActionResult> CreateOrderAsync (string userId, string phone, string address) {
+        OrderModel order = await orderService.CreateOrderAsync (userId, phone, address);
 
         return Ok (order);
     }
@@ -52,9 +52,9 @@ public class OrderController : Controller {
         return Ok ();
     }
 
-    [HttpDelete("remove_order_item/{orderItemId}")]
-    public async Task<IActionResult> RemoveOrderItemAsync (int orderItemId) {
-        await orderService.RemoveOrderItemAsync (orderItemId);
+    [HttpDelete("remove_order_item/{orderItemId}/{orderId}")]
+    public async Task<IActionResult> RemoveOrderItemAsync (int orderItemId, int orderId) {
+        await orderService.RemoveOrderItemAsync (orderItemId, orderId);
         return Ok ();
     }
 

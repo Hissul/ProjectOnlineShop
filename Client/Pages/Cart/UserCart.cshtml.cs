@@ -2,6 +2,7 @@ using Client.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ShopLib;
+using System.ComponentModel.DataAnnotations;
 
 namespace Client.Pages.Cart
 {
@@ -18,6 +19,13 @@ namespace Client.Pages.Cart
         [BindProperty]
         public List<ItemInCartModel>? CartItems { get; set; }
 
+        [BindProperty]       
+        public string Address { get; set; } = "";
+
+        [BindProperty]
+        [Phone]
+        public string Phone { get; set; } = "";
+
         public async Task<IActionResult> OnGetAsync(){
 
             string? userId = _contextAccessor.HttpContext.Session.GetString("user_id");
@@ -28,6 +36,17 @@ namespace Client.Pages.Cart
 
             CartItems = await _cartService.GetUserCartAsync(userId);
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync () {
+            string? userId = _contextAccessor.HttpContext.Session.GetString ("user_id");
+
+            if (userId == null) {
+                return RedirectToPage ("/Auth/Login");
+            }
+
+            CartItems = await _cartService.GetUserCartAsync (userId);
+            return Page (); 
         }
 
 

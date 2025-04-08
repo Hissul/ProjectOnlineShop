@@ -65,7 +65,7 @@ Content-Type: application/json
 POST {{Server_HostAddress}}/cart/add
 Content-Type: application/json
 {
-    "userId": "8f6075b6-25d8-4af5-93e1-33956c53a2de",
+    "userId": "25cace0c-c50c-4316-b140-92df2833b99b",
     "productId": 12
     
 }
@@ -73,7 +73,7 @@ Content-Type: application/json
 ###
 
 # œŒÀ”◊≈Õ»≈  Œ–«»Õ€ œŒÀ‹«Œ¬¿“≈Àﬂ
-GET {{Server_HostAddress}}/cart/user_cart/b5a59bdf-2cdb-42a2-b8a3-bfbf18729b43
+GET {{Server_HostAddress}}/cart/user_cart/25cace0c-c50c-4316-b140-92df2833b99b
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiNWE1OWJkZi0yY2RiLTQyYTItYjhhMy1iZmJmMTg3MjliNDMiLCJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJqdGkiOiI1Y2Q0Y2Y3ZS03Nzc5LTQwMTctYWMwZi0yNTM4MTFhNjMwOGMiLCJleHAiOjE3NDIyMDU4MjYsImlzcyI6InlvdXJfaXNzdWVyIiwiYXVkIjoieW91cl9hdWRpZW5jZSJ9.7zWWCB4LYA9wQ6dzlbeo0joNQ917U8XL1Ujy0cb_QSI
 Content-Type: application/json
 {
@@ -84,7 +84,7 @@ Content-Type: application/json
 
 
 # Œ‘Œ–ÃÀ≈Õ»≈ «¿ ¿«¿
-GET {{Server_HostAddress}}/order/create/b5a59bdf-2cdb-42a2-b8a3-bfbf18729b43
+GET {{Server_HostAddress}}/order/create/25cace0c-c50c-4316-b140-92df2833b99b
 Content-Type: application/json
 {
 }
@@ -92,7 +92,7 @@ Content-Type: application/json
 ###
 
 # —œ»—Œ  ¬—≈’ «¿ ¿«Œ¬ œŒÀ‹«Œ¬¿“≈Àﬂ
-GET {{Server_HostAddress}}/order/all/b5a59bdf-2cdb-42a2-b8a3-bfbf18729b43
+GET {{Server_HostAddress}}/order/all/25cace0c-c50c-4316-b140-92df2833b99b
 Content-Type: application/json
 {
 }
@@ -119,7 +119,7 @@ Content-Type: application/json
 POST {{Server_HostAddress}}/order/edit/1/Processing
 Content-Type: application/json
 {
-    "userId": "8f6075b6-25d8-4af5-93e1-33956c53a2de",
+    "userId": "25cace0c-c50c-4316-b140-92df2833b99b",
     "productId": 12
     
 }

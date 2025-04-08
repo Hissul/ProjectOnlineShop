@@ -17,6 +17,7 @@ builder.Services.AddScoped<LoginService> ();
 builder.Services.AddScoped<StoreService> ();
 builder.Services.AddScoped<CartService> ();
 builder.Services.AddScoped<OrderService> ();
+builder.Services.AddScoped<ProductService> ();
 
 // Добавляем кэш для сессий
 builder.Services.AddDistributedMemoryCache (); // Это необходимо для хранения данных сессии в памяти

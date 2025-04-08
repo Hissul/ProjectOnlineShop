@@ -1,4 +1,5 @@
 ﻿using ShopLib;
+using System.Numerics;
 using System.Reflection;
 
 namespace Client.Services;
@@ -15,13 +16,13 @@ public class OrderService {
 
 
     // Формирование заказа
-    public async Task<OrderModel?> CreateOrderAsync (string userId) {
+    public async Task<OrderModel?> CreateOrderAsync (string userId, string phone, string address) {
 
         OrderModel? model = null;
         //Console.WriteLine ($"BaseAddress: {_httpClient.BaseAddress}");
 
         try {
-            HttpResponseMessage response = await _httpClient.GetAsync ($"order/create/{userId}");
+            HttpResponseMessage response = await _httpClient.GetAsync ($"order/create/{userId}/{phone}/{address}");
 
             if (response.IsSuccessStatusCode) {
                 model = await response.Content.ReadFromJsonAsync<OrderModel> ();
@@ -131,9 +132,10 @@ public class OrderService {
     }
 
     // удаление позиции товара из заказа
-    public async Task<bool> RemoveOrderItemAsync (int orderItemId) {
+    public async Task<bool> RemoveOrderItemAsync (int orderItemId, int orderId) {
 
-        HttpRequestMessage request = new HttpRequestMessage (HttpMethod.Delete, $"/order/remove_order_item/{orderItemId}");
+        HttpRequestMessage request = 
+            new HttpRequestMessage (HttpMethod.Delete, $"/order/remove_order_item/{orderItemId}/{orderId}");
 
         try {
             HttpResponseMessage response = await _httpClient.SendAsync (request);
