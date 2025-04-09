@@ -7,38 +7,99 @@
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="~/Client.styles.css" asp-append-version="true" />
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
+            <div class="container d-flex justify-content-between align-items-center">
+                <!-- Левая часть: логотип -->
+                <div class="d-flex align-items-center">
+                    <a class="navbar-brand fw-bold" asp-area="" asp-page="/Index">OnlineShop</a>
+                </div>
 
-                <a class="navbar-brand" asp-area="" asp-page="/Index">OnlineShop</a>
+                <!-- Центр: соц.сети и телефон -->
+                <div class="d-flex align-items-center gap-3">
+                    <a href="#" class="text-success"><i class="fab fa-whatsapp fa-lg"></i></a>
+                    <a href="#" class="text-info"><i class="fab fa-telegram fa-lg"></i></a>
+                    <i class="fa-solid fa-phone text-dark"></i>
+                    <span class="fw-bold text-dark">+7 931 591-15-05</span>
+                </div>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
+                <!-- Правая часть: логин/регистрация -->
+                <div>
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
-    </header>
-    <div class="container">
+        <nav class="navbar navbar-expand-lg bg-white mb-5">
+            <div class="container d-flex justify-content-between align-items-center py-3">
+                <!-- Логотип -->
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="logo.png" alt="Логотип" height="60" class="me-2">
+                    <span class="text-muted small">Студия интерьерной<br>живописи</span>
+                </a>
+
+                <!-- Навигация -->
+                <div class="d-flex justify-content-center flex-grow-1">
+                    <ul class="navbar-nav gap-4">
+                        <li class="nav-item"><a class="nav-link text-dark fw-bold" href="/Index">Каталог картин</a></li>
+                        <li class="nav-item"><a class="nav-link text-dark fw-bold" href="/Store/CustomPainting">Картины на заказ</a></li>
+                        <li class="nav-item"><a class="nav-link text-dark fw-bold" href="/Store/About">О студии</a></li>
+                        <li class="nav-item"><a class="nav-link text-dark fw-bold" href="/Store/Contacts">Контакты</a></li>
+                    </ul>
+                </div>
+                
+                <div>                    
+                    <i class="fa-solid fa-signal text-muted"></i>
+                </div>
+            </div>
+        </nav>
+    </header> 
+
+    <div class="container pt-5 flex-grow-1">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+
+    <footer class="bg-dark text-white pt-5 pb-3">
         <div class="container">
-            &copy; 2025 - Client - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            <div class="row mb-4">
+                <div class="col-md">
+                    <a href="/Store/About" class="fw-bold text-white text-decoration-none">О студии</a>
+                </div>              
+                <div class="col-md">
+                    <a href="/Index" class="fw-bold text-white text-decoration-none">Каталог картин</a>
+                </div>
+                <div class="col-md">
+                    <a href="/Store/CustomPainting" class="fw-bold text-white text-decoration-none">Картины на заказ</a>
+                </div>
+                <div class="col-md">
+                    <p class="mb-1"><i class="fa-solid fa-envelope me-2"></i>nash_mail@kartina.ru</p>
+                    <p class="mb-1"><i class="fa-solid fa-location-dot me-2"></i>г. Москва,<br> наб. Какого-то канала д.0,<br> корп. 0, литера Ы, 0 этаж</p>                    
+                </div>
+                <div class="col-md">
+                    <p class="mb-2"><i class="fa-solid fa-phone me-2"></i>+7 999 666-99-66</p>
+                    <button class="btn btn-light rounded-pill">ЗАКАЗАТЬ ЗВОНОК</button>
+                </div>
+            </div>
+
+            <div class="row align-items-center border-top border-secondary pt-3">              
+                <div class="col-md-4 text-center mb-3 mb-md-0">
+                    <a href="#"><i class="fab fa-whatsapp fa-2x me-3 text-success"></i></a>
+                    <a href="#"><i class="fab fa-telegram fa-2x text-info"></i></a>
+                </div>
+                <div class="col-md-4 text-center text-md-end">
+                    <p class="mb-0">&copy; 2025 Студия "Ла Картина", все права защищены</p>
+                </div>
+            </div>
         </div>
     </footer>
+
 
     <!-- Подключаем jQuery и Bootstrap -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

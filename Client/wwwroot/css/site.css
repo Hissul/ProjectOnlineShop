@@ -18,7 +18,7 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+  margin: 0;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -118,6 +118,19 @@ a.body {
 .order-table, .card-header {
     background-color: #f8f9fa !important; /* Цвет как у card-header */
     color: #212529; /* Цвет текста */
+}
+
+
+
+/*стили иконок на стр: О нас*/
+.contact-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.contact-info {
+    text-align: center;
+    padding: 20px;
 }
 
 
