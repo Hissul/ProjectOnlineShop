@@ -23,6 +23,7 @@ builder.Services.AddScoped<StoreService> ();
 builder.Services.AddScoped<CartService> ();
 builder.Services.AddScoped<OrderService> ();
 builder.Services.AddScoped<ProductService> ();
+builder.Services.AddScoped<UserService> ();
 
 builder.Services.AddCors (options => {
     options.AddPolicy ("AllowAll",

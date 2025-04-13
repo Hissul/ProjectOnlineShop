@@ -62,11 +62,11 @@ public class LoginService {
 
 
     // Регистрация   
-    public async Task<bool> RegisterAsync (string email, string password, string fullName) {
+    public async Task<bool> RegisterAsync (string email, string password, string confirmPassword,  string fullName) {
         try {
             HttpResponseMessage response = 
                 await _httpClient.PostAsJsonAsync ("auth/register", 
-                new { Email = email, Password = password, FullName = fullName });
+                new { Email = email, Password = password, ConfirmPassword = confirmPassword, FullName = fullName });
 
             if (!response.IsSuccessStatusCode) {
                 string error = await response.Content.ReadAsStringAsync ();

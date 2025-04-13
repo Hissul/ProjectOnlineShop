@@ -24,7 +24,7 @@ namespace Client.Pages.Auth
 
         public async Task<IActionResult> OnPost () {
 
-            bool success = await _apiService.RegisterAsync (RegModel.Email, RegModel.Password, RegModel.FullName);
+            bool success = await _apiService.RegisterAsync (RegModel.Email, RegModel.Password, RegModel.ConfirmPassword,  RegModel.FullName);
 
             if (!success) {
                 ModelState.AddModelError ("", "Ошибка регистрации. Попробуйте снова.");

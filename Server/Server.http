@@ -133,3 +133,21 @@ Content-Type: application/json
 }
 
 ###
+
+
+
+# онксвемхе бяеу онкэгнбюрекеи
+GET {{Server_HostAddress}}/user/all
+Content-Type: application/json
+{
+}
+
+###
+
+# онксвемхе бяеу онкэгнбюрекеи
+GET {{Server_HostAddress}}/user/25cace0c-c50c-4316-b140-92df2833b99b
+Content-Type: application/json
+{
+}
+
+###

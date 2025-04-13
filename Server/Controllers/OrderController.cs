@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Server.Services;
 using ShopLib;
 
@@ -6,7 +7,7 @@ namespace Server.Controllers;
 
 [ApiController]
 [Route ("order")]
-//[Authorize(Policy = "RequireAdministratorRole")]
+[Authorize]
 public class OrderController : Controller {
 
     private readonly OrderService orderService;

@@ -32,12 +32,9 @@ namespace Client.Pages.Admin.Products
                 return RedirectToPage ("/Auth/Login");
             }
 
-            ReturnUrl = returnUrl ?? "/Admin/Statistics/Statistic";
-           
+            ReturnUrl = returnUrl ?? "/Admin/Statistics/Statistic";           
 
-            Product = await _storeService.GetFullProductAsync (productId);
-
-           
+            Product = await _storeService.GetFullProductAsync (productId);           
             return Page ();
         }
 

@@ -7,7 +7,7 @@
 
 
 
-<div class="container mt-4">
+<div class="container mt-4 pb-5">
     <div class="row g-5">
         <!-- Левая часть с изображением -->
         <div class="col-md-7 img-container">
@@ -44,6 +44,8 @@
                     <p><strong>Техника:</strong> @Model.Product.Technique</p>
                     <p><strong>Размер:</strong> @Model.Product.Size</p>
 
+                    <hr class="mt-5" style="width: 100%; border: 1px solid black;">
+
                 </div>
                 <div class="col-md-6">
                     <p><strong>Год создания:</strong> @Model.Product.Year</p>
@@ -52,16 +54,62 @@
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Блок "О художнике" -->
-@*     <div class="row mt-5">
-        <div class="col-md-2">
-            <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Product.ArtistImage)" class="rounded-circle img-fluid" alt="@Model.Product.Artist">
+
+<!-- Доп. опции блок -->
+<div class="container-fluid frame-section" >
+    <div class="container my-3">
+
+        <h4 class="text-center my-5">Варианты оформления картины</h4>
+
+        <div class="row align-items-center" style="background-color: #f2f2f2;">
+            <div class="col-md-7 frame-text">
+                <h3 class="mx-5">Идеальное решение<br>для современного интерьера</h3>
+                <hr class="mx-5" style="width: 100px; border: 1px solid black;">
+                <p class="mx-5">Студийная рама - холст на подрамнике устанавливается внутри рамы с небольшим отступом от краев, благодаря чему картина приобретает дополнительную глубину и объем. Выглядит очень стильно и дорого.</p>
+                <p class="mx-5">Хотите получить каталог рам и расчет стоимости под ваш размер?</p>
+                <a href="#" class="btn btn-outline-dark mt-3 mx-5 rounded-0 w-50">Получить каталог рам</a>
+            </div>
+
+            <div class="col-md-5 frame-image text-center">
+                <img src="/Images/Details/frame-studio.jpg" alt="Пример оформления картины">
+            </div>
         </div>
-        <div class="col-md-10">
-            <h5>@Model.Product.Artist</h5>
-            <p>@Model.Product.ArtistBio</p>
+    </div>
+</div>
+
+<div class="container my-3">
+    <div class="row align-items-center" style="background-color: #f2f2f2;">
+        <div class="col-md-7 frame-text">
+            <h3 class="mx-5">
+                Минималистичная багетная рама<br>или рама с декором под ваш интерьер
+            </h3>
+            <hr class="mx-5" style="width: 100px; border: 1px solid black;">
+            <p class="mx-5">У нашей студии есть своя багетная мастерская  - в наличии более 250 вариантов багетных рам. Мы поможем подобрать багет к картине и красиво оформим ее в выбранную раму. Стоимость багетной рамы зависит от размера картины.</p>
+            <p class="mx-5">Хотите получить каталог рам и расчет стоимости под ваш размер?</p>
+            <a href="#" class="btn btn-outline-dark mt-3 mx-5 rounded-0 w-50">Получить каталог рам</a>
         </div>
-    </div> *@
+
+        <div class="col-md-5 frame-image text-center">
+            <img src="/Images/Details/frame-classic.jpg" alt="Пример оформления картины">
+        </div>
+    </div>
+</div>
+
+<div class="container my-3">
+    <div class="row align-items-center" style="background-color: #f2f2f2;">
+        <div class="col-md-7 frame-text">
+            <h3 class="mx-5">
+                Галерейная натяжка холста
+            </h3>
+            <hr class="mx-5" style="width: 100px; border: 1px solid black;">
+            <p class="mx-5">Холст заворачивается за края подрамника. Отлично смотрится и без багетной рамы - эстетично и современно. Такое оформление холста делаем бесплатно.</p>            
+        </div>
+
+        <div class="col-md-5 frame-image text-center">
+            <img src="/Images/Details/frame-no.jpg" alt="Пример оформления картины">
+        </div>
+    </div>
 </div>
 

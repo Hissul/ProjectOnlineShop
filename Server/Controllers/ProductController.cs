@@ -8,7 +8,7 @@ namespace Server.Controllers;
 
 [ApiController]
 [Route("product")]
-//[Authorize(Policy = "RequireAdministratorRole")]
+[Authorize(Policy = "RequireAdministratorRole")]
 public class ProductController : Controller {
 
     private readonly ProductService _productService;

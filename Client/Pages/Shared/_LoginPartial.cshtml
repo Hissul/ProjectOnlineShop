@@ -10,38 +10,38 @@
     @if (!string.IsNullOrEmpty(roleString))
     {
         <li class="nav-item header">
-            <a class="nav-link text-dark header  my-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Привет, @userName!</a>
+            <a class="nav-link text-dark fw-bold" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Привет, @userName!</a>
         </li>
 
         @if (roles.Contains("Admin"))
         {
               <li class="nav-item">
-                <a class="nav-link" asp-page="/Admin/Statistics/Statistic">Админка</a>
+                <a class="nav-link text-dark fw-bold" asp-page="/Admin/Statistics/Statistic">Админка</a>
             </li>
         }
         else if (roles.Contains("User"))
         {
             <li class="nav-item header">
-                <a class="nav-link text-dark header  my-link" asp-page="/Cart/UserCart">Корзина</a>
+                <a class="nav-link text-dark fw-bold" asp-page="/Cart/UserCart">Корзина</a>
             </li>
             <li class="nav-item header">
-                <a class="nav-link text-dark header  my-link" asp-page="/Order/UserOrders">Заказы</a>
+                <a class="nav-link text-dark fw-bold" asp-page="/Order/UserOrders">Заказы</a>
             </li>
         }
 
         <li class="nav-item header">
             <form class="form-inline header" asp-area="Identity" asp-page="/Auth/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
-                <button type="submit" class="nav-link btn btn-link text-dark header  my-link">Выход</button>
+                <button type="submit" class="nav-link btn btn-link text-dark header  fw-bold">Выход</button>
             </form>
         </li>
     }
     else
     {
         <li class="nav-item header">
-            <a class="nav-link text-dark header  my-link" asp-area="Identity" asp-page="/Auth/Register">Регистрация</a>
+            <a class="nav-link text-dark fw-bold" asp-area="Identity" asp-page="/Auth/Register">Регистрация</a>
         </li>
         <li class="nav-item header">
-            <a class="nav-link text-dark header  my-link" asp-area="Identity" asp-page="/Auth/Login">Вход</a>
+            <a class="nav-link text-dark fw-bold" asp-area="Identity" asp-page="/Auth/Login">Вход</a>
         </li>
     }
 </ul>

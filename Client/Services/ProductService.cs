@@ -47,10 +47,7 @@ public class ProductService {
     // добавление продукта
     public async Task<bool> AddProductAsync (ProductFullModel product) {
 
-        string json = JsonSerializer.Serialize (product);
-
-        Console.WriteLine (json);
-
+        string json = JsonSerializer.Serialize (product);  
         StringContent content = new StringContent (json, Encoding.UTF8, "application/json");
 
         HttpRequestMessage request = new HttpRequestMessage (HttpMethod.Post, "product/add") {
@@ -65,6 +62,7 @@ public class ProductService {
                 Console.WriteLine ($"Ошибка при добавлении товара : {error}");
                 return false;
             }
+
             Console.WriteLine ($"Товар был добавлен!");
             return true;
         }
@@ -72,7 +70,6 @@ public class ProductService {
             Console.WriteLine ($"Ошибка сети: {ex.Message}");
             return false;
         }
-
     }
 
 

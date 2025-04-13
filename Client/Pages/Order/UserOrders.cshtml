@@ -6,7 +6,7 @@
 }
 
 
-<div class="container">
+<div class="container pb-5">
     <h2 class="text-center my-4">Ваши заказы</h2>
 
     @if (!Model.OrderModels.Any())
@@ -34,49 +34,3 @@
         </div>
     }
 </div>
-
-
-@* <div class="container text-center">
-    <div class="row  align-items-center">
-        <div class="col">
-        </div>
-
-        <div class="col-10">
-            <h2>Ваши заказы</h2>
-
-            @if (!Model.OrderModels.Any())
-            {
-                <p>Заказов не найдено.</p>
-            }
-            else
-            {
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th class="body">Order Date</th>
-                            <th class="body">Status</th>
-                            <th class="body">Total Amount</th>
-                            <th class="body">Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var order in Model.OrderModels)
-                        {
-                            <tr>
-                                <td class="body">@order.OrderedDate.ToString("g")</td>
-                                <td class="body">@order.Status</td>
-                                <td class="body">$@order.TotalAmount</td>
-                                <td class="body">
-                                    <a asp-page="/Orders/Details" asp-route-id="@order.Id" class="btn btn-primary  my-btn">Детали заказа</a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-        </div>
-
-        <div class="col">
-        </div>
-    </div>
-</div> *@
