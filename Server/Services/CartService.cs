@@ -100,7 +100,7 @@ public class CartService {
         Cart? cart = await GetCartByUserId (userId);
 
         if (cart != null) {
-            CartItem? cartItem = cart.Items.FirstOrDefault (c => c.ProductId == productId);
+            CartItem? cartItem = cart.Items.FirstOrDefault (c => c.ProductId == productId);            
 
             cart.Items.Remove (cartItem);
             await _context.SaveChangesAsync ();

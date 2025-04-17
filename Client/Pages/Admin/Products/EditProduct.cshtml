@@ -5,6 +5,13 @@
     
 }
 
+@if (TempData["Notification"] != null)
+{
+    <div class="alert @(TempData["NotificationType"]?.ToString() == "success" ? "alert-success" : "alert-danger")">
+        @TempData["Notification"]
+    </div>
+}
+
 <div class="container text-center">
     <div class="row justify-content-center">
         <div class="col-12 col-md-10">

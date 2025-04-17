@@ -14,7 +14,19 @@ namespace Client.Pages.Cart
             _contextAccessor = contextAccessor;
         }
 
-        public async Task<IActionResult> OnGetAsync(int productId){
+
+        [TempData]
+        public string? Notification { get; set; }
+
+        [TempData]
+        public string? NotificationType { get; set; }     
+
+
+        public async Task<IActionResult> OnGetAsync(int productId) {
+
+            TempData.Remove ("Notification");
+            TempData.Remove ("NotificationType");
+
             string? userId = _contextAccessor.HttpContext.Session.GetString("user_id");
 
             if(userId == null) {
@@ -22,7 +34,18 @@ namespace Client.Pages.Cart
             }
 
             bool result = await _cartService.AddToCartAsync (userId, productId);
-            return RedirectToPage ("UserCart");
+
+            if (result) {
+                Notification = "Товар добавлен в корзину.";
+                NotificationType = "success";
+            }
+            else {
+                Notification = "Ошибка при добавлении товара корзину. Повторите попытку позже";
+                NotificationType = "error";
+            }            
+
+            return  RedirectToPage("UserCart");
+            
         }
     }
 }

@@ -20,8 +20,17 @@ namespace Client.Pages.Admin.Orders
         [BindProperty]
         public string? ReturnUrl { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int orderId, string? returnUrl)
-        {
+        [TempData]
+        public string? Notification { get; set; }
+
+        [TempData]
+        public string? NotificationType { get; set; }
+
+        public async Task<IActionResult> OnGetAsync(int orderId, string? returnUrl){
+
+            TempData.Remove ("Notification");
+            TempData.Remove ("NotificationType");
+
             string? userId = _contextAccessor.HttpContext.Session.GetString ("user_id");
 
             if (userId == null) {
@@ -39,11 +48,17 @@ namespace Client.Pages.Admin.Orders
         public async Task<IActionResult> OnPostAsync () {
 
             bool result = await _orderService.EditOrderAsync (Order.Id, Order.Status);
-
-            if(result)
+          
+            if (result) {
+                Notification = "Заказ изменен.";
+                NotificationType = "success";
                 return RedirectToPage (ReturnUrl);
-
-            return Page();
+            }
+            else {
+                Notification = "Ошибка при изменении заказа.";
+                NotificationType = "error";
+                return Page ();
+            }
         }
 
 

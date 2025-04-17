@@ -14,14 +14,36 @@ namespace Client.Pages.Cart
             _contextAccessor = contextAccessor;
         }
 
+
+        [TempData]
+        public string? Notification { get; set; }
+
+        [TempData]
+        public string? NotificationType { get; set; }
+
+
+
         public async Task<IActionResult> OnGet(int productId){
+
+            TempData.Remove ("Notification");
+            TempData.Remove ("NotificationType");
+
             string? userId = _contextAccessor.HttpContext.Session.GetString ("user_id");
 
             if (userId == null) {
                 return RedirectToPage ("/Auth/Login");
             }
 
-            await _cartService.RemoveProductFromCartAsync (userId, productId);
+            bool result = await _cartService.RemoveProductFromCartAsync (userId, productId);
+
+            if (result) {
+                Notification = "Товар удален из корзины.";
+                NotificationType = "success";
+            }
+            else {
+                Notification = "Ошибка при удалении товара из корзины. Повторите попытку позже";
+                NotificationType = "error";
+            }
             return RedirectToPage ("UserCart");
         }
     }

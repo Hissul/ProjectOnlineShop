@@ -23,7 +23,15 @@ namespace Client.Pages.Admin.Products
         [BindProperty]
         public IFormFile ImageFile { get; set; }
 
+        [TempData]
+        public string? Notification { get; set; }
+
+        [TempData]
+        public string? NotificationType { get; set; }
+
         public void OnGet(){
+            TempData.Remove ("Notification");
+            TempData.Remove ("NotificationType");
         }
 
         public async Task<IActionResult> OnPostAsync () {
@@ -39,7 +47,13 @@ namespace Client.Pages.Admin.Products
             bool result = await _productService.AddProductAsync (Product);
 
             if (result) {
+                Notification = "Товар успешно добавлен.";
+                NotificationType = "success";
                 return RedirectToPage ("/Admin/Products/ChangeProduct");
+            }
+            else {
+                Notification = "Ошибка при добавлении товара.";
+                NotificationType = "error";
             }
           
             return Page();

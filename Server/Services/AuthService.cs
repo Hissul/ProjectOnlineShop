@@ -26,7 +26,7 @@ public class AuthService {
     /// <summary>
     /// Авторизация и выдача JWT токена
     /// </summary>
-    public async Task<UserModel?> LoginAsync (LoginModel model) { 
+    public async Task<UserModel?> LoginAsync (LoginModel model) {
 
         ApplicationUser? user = await _userManager.FindByEmailAsync (model.Email);
 
@@ -34,23 +34,23 @@ public class AuthService {
             return null;
 
         // попытка аутентификации пользователя 
-        var result = await _signInManager.PasswordSignInAsync (user, model.Password, false, false);       
+        var result = await _signInManager.PasswordSignInAsync (user, model.Password, false, false);
 
         if (!result.Succeeded)
             return null;
 
         // LOGER
 
-        string token = GenerateJwtToken (user);
+        string token = await GenerateJwtToken (user);
 
         IList<string> roles = await _userManager.GetRolesAsync (user);
 
-        UserModel userModel = new UserModel { 
-            Id = user.Id, 
-            FullName = user.FullName, 
-            Email = user.Email, 
-            Token = token, 
-            Roles = roles 
+        UserModel userModel = new UserModel {
+            Id = user.Id,
+            FullName = user.FullName,
+            Email = user.Email,
+            Token = token,
+            Roles = roles
         };
 
         // LOGER
@@ -62,22 +62,31 @@ public class AuthService {
     /// <summary>
     /// Генерация JWT-токена
     /// </summary>
-    private string GenerateJwtToken (ApplicationUser user) {
+    private async Task<string> GenerateJwtToken (ApplicationUser user) {
 
         byte[] key = Encoding.UTF8.GetBytes (_config["Jwt:Secret"]!);
 
-        Claim[] claims = new[] {
+        IList<string> userRoles = await _userManager.GetRolesAsync (user);
+
+        List<Claim> claims = new List<Claim> {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
+
+        // Добавляем роли
+        foreach (var role in userRoles) {
+            claims.Add (new Claim (ClaimTypes.Role, role));
+        }
 
         JwtSecurityToken token = new JwtSecurityToken (
             issuer: _config["Jwt:Issuer"],
             audience: _config["Jwt:Audience"],
             claims: claims,
             expires: DateTime.UtcNow.AddHours (1),
-            signingCredentials: new SigningCredentials (new SymmetricSecurityKey (key), SecurityAlgorithms.HmacSha256));
+            signingCredentials: new SigningCredentials (
+                new SymmetricSecurityKey (key),
+                SecurityAlgorithms.HmacSha256));
 
         // LOGER
 
@@ -90,10 +99,10 @@ public class AuthService {
     /// </summary>
     public async Task<IdentityResult> RegisterAsync (RegisterModel model) {
 
-        ApplicationUser user = new ApplicationUser { 
-            UserName = model.Email, 
-            Email = model.Email, 
-            FullName = model.FullName 
+        ApplicationUser user = new ApplicationUser {
+            UserName = model.Email,
+            Email = model.Email,
+            FullName = model.FullName
         };
 
         IdentityResult result = await _userManager.CreateAsync (user, model.Password);

@@ -48,6 +48,7 @@ public class StoreService {
                 Price = p.Price,
                 StockQuantity = p.StockQuantity,
                 Image = p.Image,
+                Reserve = p.Reserve,
                 Technique = p.ProductInfo != null ? p.ProductInfo.Technique : "Не указано",
                 Material = p.ProductInfo != null ? p.ProductInfo.Material : "Не указано",
                 Plot = p.ProductInfo != null ? p.ProductInfo.Plot : "Не указано",

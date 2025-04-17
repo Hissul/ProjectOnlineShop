@@ -15,7 +15,21 @@ namespace Client.Pages.Order
             this.httpContextAccessor = httpContextAccessor;
         }
 
+
+
+        [TempData]
+        public string? Notification { get; set; }
+
+        [TempData]
+        public string? NotificationType { get; set; }
+
+
+
         public async Task<IActionResult> OnGet(string phone, string address) {
+
+            TempData.Remove ("Notification");
+            TempData.Remove ("NotificationType");
+
             string? userId = httpContextAccessor.HttpContext.Session.GetString("user_id");
 
             if (userId == null) {
@@ -23,6 +37,16 @@ namespace Client.Pages.Order
             }
 
             OrderModel? order = await orderService.CreateOrderAsync (userId, phone, address);
+
+            if (order != null) {
+                Notification = "Ваш заказ оформлен.";
+                NotificationType = "success";
+            }
+            else {
+                Notification = "Ошибка при оформлении заказа. Повторите попытку позже";
+                NotificationType = "error";
+            }
+
             return RedirectToPage ("/Order/UserOrders");
         }
     }

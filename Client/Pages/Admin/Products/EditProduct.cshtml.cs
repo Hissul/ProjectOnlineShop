@@ -23,10 +23,19 @@ namespace Client.Pages.Admin.Products
         [BindProperty]
         public string? ReturnUrl { get; set; }
 
+        [TempData]
+        public string? Notification { get; set; }
+
+        [TempData]
+        public string? NotificationType { get; set; }
+
 
         public async Task<IActionResult> OnGetAsync(int productId, string returnUrl){
 
             string? userId = _contextAccessor.HttpContext.Session.GetString ("user_id");
+
+            TempData.Remove ("Notification");
+            TempData.Remove ("NotificationType");
 
             if (userId == null) {
                 return RedirectToPage ("/Auth/Login");
@@ -48,8 +57,14 @@ namespace Client.Pages.Admin.Products
 
             
             if (result) {
+                Notification = "Товар успешно отредактирован.";
+                NotificationType = "success";
                 return RedirectToPage (ReturnUrl);
             }
+            else {
+                Notification = "Ошибка при редактировании товара.";
+                NotificationType = "error";
+            }           
 
             return Page ();
         }

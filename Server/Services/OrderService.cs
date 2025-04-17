@@ -207,6 +207,9 @@ public class OrderService {
                 if (product != null && product.Reserve > 0 && orderStatus == "Processing") {
                     product.Reserve -= item.Quantity;
                 }
+                else if(product != null && orderStatus == "Cancelled") {
+                    product.StockQuantity += item.Quantity;
+                }
             }
 
             await _context.SaveChangesAsync ();
@@ -219,13 +222,18 @@ public class OrderService {
     /// </summary>
     public async Task RemoveOrderItemAsync (int orderItemId, int orderId) {
 
-        OrderItem? orderItem = await _context.OrderItems.FirstOrDefaultAsync (o => o.Id == orderItemId);        
+        OrderItem? orderItem = await _context.OrderItems.FirstOrDefaultAsync (o => o.Id == orderItemId);
 
-        if (orderItem != null) { 
+        if (orderItem != null) {
             _context.OrderItems.Remove (orderItem);
 
-            Order? order = await _context.Orders.FirstOrDefaultAsync (o => o.Id == orderId);
+            Product? product = await _context.Products.FirstOrDefaultAsync (p => p.Id == orderItem.ProductId);
+            if (product != null) { 
+                product.StockQuantity += orderItem.Quantity;
+                product.Reserve -= orderItem.Quantity;
+            }
 
+            Order? order = await _context.Orders.FirstOrDefaultAsync (o => o.Id == orderId);
             if (order != null) {
                 order.TotalAmount -= orderItem.Price;
             }

@@ -95,7 +95,7 @@ public class CartService {
     }
 
     // удаление товара из корзины
-    public async Task RemoveProductFromCartAsync (string userId, int productId) {
+    public async Task<bool> RemoveProductFromCartAsync (string userId, int productId) {
 
         string json = JsonSerializer.Serialize (new { UserId = userId, ProductId = productId });
         StringContent content = new StringContent (json, Encoding.UTF8, "application/json");
@@ -110,13 +110,14 @@ public class CartService {
             if (!response.IsSuccessStatusCode) {
                 string error = await response.Content.ReadAsStringAsync ();
                 Console.WriteLine ($"Ошибка при удаление товара из корзины: {error}");
-                return;
+                return false;
             }
             Console.WriteLine ($"Товар {productId} был удален из корзины");
+            return true;
         }
         catch (Exception ex) {
             Console.WriteLine ($"Ошибка сети: {ex.Message}");
-            return;
+            return false;
         }
     }
 

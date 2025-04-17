@@ -59,13 +59,29 @@
                 </div>
             </div>
         </nav>
-    </header> 
+    </header>
 
     <div class="container pt-5 flex-grow-1">
         <main role="main" class="pb-3">
+
+            @* Блок уведомлений (TempData) *@
+            @if (TempData["Notification"] != null)
+            {
+                <div id="notification" class="alert alert-@TempData["NotificationType"] position-fixed bottom-0 end-0 m-3 z-3" role="alert">
+                    @TempData["Notification"]
+                </div>
+            }
+
             @RenderBody()
+
         </main>
     </div>
+
+@*     <div class="container pt-5 flex-grow-1">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div> *@
 
 
     <footer class="bg-dark text-white pt-5 pb-3">

@@ -33,7 +33,7 @@ public class ProductController : Controller {
 
     [HttpPost("edit")]
     public async Task<IActionResult> EditProductAsync ([FromBody] ProductFullModel productFullModel) {
-
+        Console.WriteLine ("\n\n\nE  D  I  T\n\n");
         await _productService.EditProductAsync(productFullModel);
         return Ok(new { message = "Товар изменен!" });
     }

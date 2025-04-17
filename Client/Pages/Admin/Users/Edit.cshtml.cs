@@ -17,6 +17,7 @@ namespace Client.Pages.Admin.Users
             _contextAccessor = contextAccessor;
         }
 
+
         [BindProperty]
         public UserModel User { get; set; }
 
@@ -29,8 +30,19 @@ namespace Client.Pages.Admin.Users
         [BindProperty]
         public string ReturnUrl { get; set; }
 
+        [TempData]
+        public string? Notification { get; set; }
+
+        [TempData]
+        public string? NotificationType { get; set; }
+
+
 
         public async Task<IActionResult> OnGet(string id, string returnUrl) {
+
+            TempData.Remove ("Notification");
+            TempData.Remove ("NotificationType");
+
             string? userId = _contextAccessor.HttpContext.Session.GetString("user_id");
 
             if (userId == null) {
@@ -55,8 +67,18 @@ namespace Client.Pages.Admin.Users
             bool result = await _userService.EditUserAsync (User);
 
             if (!result) { 
-                return Page();
+               
             }
+
+            if (result) {
+                Notification = "Товар успешно добавлен.";
+                NotificationType = "success";
+                return Page ();
+            }
+           
+             Notification = "Ошибка при добавлении товара.";
+             NotificationType = "error";
+           
             return RedirectToPage (ReturnUrl);
         }
 
