@@ -35,6 +35,32 @@ public class StoreService {
 
 
     /// <summary>
+    /// Получение всех продуктов (краткая инфа)(постранично)
+    /// </summary>
+    public async Task<(List<ProductShortModel> Products, int TotalCount)> GetPagedProductsAsync (int pageNumber, int pageSize) {
+        IQueryable<Product> query = _context.Products.AsQueryable ();
+
+        int totalCount = await query.CountAsync ();
+
+        List<ProductShortModel> products = await query
+            .OrderBy (p => p.Id)
+            .Skip ((pageNumber - 1) * pageSize)
+            .Take (pageSize)
+            .Select (p => new ProductShortModel {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                StockQuantity = p.StockQuantity,
+                Image = p.Image
+            })
+            .ToListAsync ();
+
+        return (products, totalCount);
+    }
+
+
+    /// <summary>
     /// Получение всех продуктов (фул инфа)
     /// </summary>
     public async Task<List<ProductFullModel>> GetAllProductFullAsync () {
@@ -59,6 +85,30 @@ public class StoreService {
             .ToListAsync ();
 
         return products;
+    }
+
+
+    /// <summary>
+    /// Получение всех продуктов (фул инфа)(постранично)
+    /// </summary>
+    public IQueryable<ProductFullModel> GetFullProductQuery () {
+        return _context.Products
+            .Include (p => p.ProductInfo)
+            .Select (p => new ProductFullModel {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                StockQuantity = p.StockQuantity,
+                Image = p.Image,
+                Reserve = p.Reserve,
+                Technique = p.ProductInfo != null ? p.ProductInfo.Technique : "Не указано",
+                Material = p.ProductInfo != null ? p.ProductInfo.Material : "Не указано",
+                Plot = p.ProductInfo != null ? p.ProductInfo.Plot : "Не указано",
+                Style = p.ProductInfo != null ? p.ProductInfo.Style : "Не указано",
+                Size = p.ProductInfo != null ? $"{p.ProductInfo.Wight} × {p.ProductInfo.Height}" : "Не указано",
+                Year = p.ProductInfo != null ? p.ProductInfo.Year : 0
+            });
     }
 
 
@@ -93,4 +143,8 @@ public class StoreService {
 
         return product;
     }
+
+
+
+
 }
