@@ -15,9 +15,11 @@ namespace Server.Controllers;
 public class AuthController : Controller {
 
     private readonly AuthService _authService;
+    private readonly ILogger<AuthController> _logger;
 
-    public AuthController (AuthService authService) {
+    public AuthController (AuthService authService, ILogger<AuthController> logger) {
         _authService = authService;
+        _logger = logger;
     }
 
     [HttpPost ("register")]
@@ -25,10 +27,12 @@ public class AuthController : Controller {
 
         IdentityResult result = await _authService.RegisterAsync (model);
 
-        if (!result.Succeeded) 
+        if (!result.Succeeded) {
+            _logger.LogWarning ("Ошибка регистрации через контроллер. Email: {Email}", model.Email);
             return BadRequest (result.Errors);
-        
+        }
 
+        _logger.LogInformation ("Регистрация прошла успешно. Email: {Email}", model.Email);
         return Ok (new { message = "Пользователь зарегистрирован!" });
     }
 
@@ -38,20 +42,26 @@ public class AuthController : Controller {
     [HttpPost ("login")]
     public async Task<ActionResult<UserModel>> Login ([FromBody] LoginModel model) {
 
-        if (model == null || string.IsNullOrEmpty (model.Email) || string.IsNullOrEmpty (model.Password))
+        if (model == null || string.IsNullOrEmpty (model.Email) || string.IsNullOrEmpty (model.Password)) {
+            _logger.LogWarning ("Попытка входа с пустыми данными.");
             return BadRequest (new { message = "Некорректные данные" });
+        }
 
         UserModel? loginResult = await _authService.LoginAsync (model);
 
-        if(loginResult == null)
+        if (loginResult == null) {
+            _logger.LogWarning ("Неверный логин: {Email}", model.Email);
             return Unauthorized (new { message = "Неверный email или пароль" });
+        }
 
+        _logger.LogInformation ("Успешный логин: {Email}", model.Email);
         return Ok (loginResult);
     }
 
 
     [HttpPost ("logout")]
     public async Task<IActionResult> LogoutAsync (bool param) {
+        _logger.LogInformation ("Запрос на выход из системы");
         await _authService.LogoutAsync ();
         return Ok (new { message = "Выход выполнен успешно" });
     }

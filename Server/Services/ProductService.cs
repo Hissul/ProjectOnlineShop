@@ -8,9 +8,12 @@ namespace Server.Services;
 public class ProductService {
 
     private readonly ApplicationDbContext _context;
+    private readonly ILogger<ProductService> _logger;
 
-    public ProductService (ApplicationDbContext context) {
+
+    public ProductService (ApplicationDbContext context, ILogger<ProductService> logger) {
         _context = context;
+        _logger = logger;
     }
 
 
@@ -23,23 +26,25 @@ public class ProductService {
         if (product != null && product.StockQuantity > 0) {
             product.StockQuantity -= quantity;
 
-            if (product.Reserve == null) {
+            if (product.Reserve == null)
                 product.Reserve = 0;
-            }
+
             product.Reserve += quantity;
 
             await _context.SaveChangesAsync ();
+
+            _logger.LogInformation ("Изменено количество товара (ID: {ProductId}): -{Quantity}, резерв теперь: {Reserve}", productId, quantity, product.Reserve);
+        }
+        else {
+            _logger.LogWarning ("Не удалось изменить количество товара (ID: {ProductId}). Товар не найден или недостаточное количество.", productId);
         }
     }
-
-    
 
 
     /// <summary>
     /// Добавление нового продукта
     /// </summary>
-    public async Task AddProductAsync (ProductFullModel productFullModel) {   
-
+    public async Task AddProductAsync (ProductFullModel productFullModel) {
         Product product = new Product {
             Name = productFullModel.Name,
             Description = productFullModel.Description,
@@ -62,31 +67,29 @@ public class ProductService {
 
         _context.Products.Add (product);
         await _context.SaveChangesAsync ();
+
+        _logger.LogInformation ("Добавлен товар: {ProductName}, ID: {ProductId}", product.Name, product.Id);
     }
+
 
 
     /// <summary>
     /// Изменение продукта
     /// </summary>
     public async Task EditProductAsync (ProductFullModel productFullModel) {
-
         Product? product = await _context.Products
-            .Where(p => p.Id == productFullModel.Id)
-            .Include(p => p.ProductInfo)
+            .Where (p => p.Id == productFullModel.Id)
+            .Include (p => p.ProductInfo)
             .FirstOrDefaultAsync ();
 
-        Console.WriteLine ($"\n\n\n product.StockQuantity {product.StockQuantity}\n\n\n ");
-
-
-        Console.WriteLine ($"\n\n\n product.StockQuantity {product.StockQuantity}\n\n\n ");
-
-        if(product != null) {
-            product.Name  = productFullModel.Name;
+        if (product != null) {
+            product.Name = productFullModel.Name;
             product.Description = productFullModel.Description;
             product.Price = productFullModel.Price;
             product.StockQuantity = productFullModel.StockQuantity;
             product.Reserve = productFullModel.Reserve;
             product.Image = productFullModel.Image;
+
             product.ProductInfo.Technique = productFullModel.Technique;
             product.ProductInfo.Material = productFullModel.Material;
             product.ProductInfo.Plot = productFullModel.Plot;
@@ -96,9 +99,12 @@ public class ProductService {
             product.ProductInfo.Height = productFullModel.Height;
 
             await _context.SaveChangesAsync ();
-        }
 
-        Console.WriteLine ($"\n\n\n product.StockQuantity {product.StockQuantity}\n\n\n ");
+            _logger.LogInformation ("Обновлен товар: {ProductName}, ID: {ProductId}", product.Name, product.Id);
+        }
+        else {
+            _logger.LogWarning ("Товар для редактирования не найден: ID {ProductId}", productFullModel.Id);
+        }
     }
 
 
@@ -106,9 +112,19 @@ public class ProductService {
     /// Удаление продукта
     /// </summary>
     public async Task DeleteProductAsync (int productId) {
+        var product = await _context.Products
+            .Include (p => p.ProductInfo)
+            .FirstOrDefaultAsync (p => p.Id == productId);
 
+        if (product != null) {
+            _context.ProductInfos.Remove (product.ProductInfo);
+            _context.Products.Remove (product);
+            await _context.SaveChangesAsync ();
+
+            _logger.LogInformation ("Удален товар: {ProductName}, ID: {ProductId}", product.Name, product.Id);
+        }
+        else {
+            _logger.LogWarning ("Не удалось удалить товар. Товар с ID {ProductId} не найден.", productId);
+        }
     }
-
-
-
 }

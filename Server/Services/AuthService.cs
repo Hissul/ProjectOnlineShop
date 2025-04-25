@@ -14,12 +14,19 @@ public class AuthService {
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _config;
+    private readonly ILogger<AuthService> _logger;
 
-    public AuthService (UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, IConfiguration config) {
+    public AuthService (
+        UserManager<ApplicationUser> userManager,
+        SignInManager<ApplicationUser> signInManager,
+        RoleManager<IdentityRole> roleManager,
+        IConfiguration config,
+        ILogger<AuthService> logger) {
         _userManager = userManager;
         _signInManager = signInManager;
         _roleManager = roleManager;
         _config = config;
+        _logger = logger;
     }
 
 
@@ -30,32 +37,30 @@ public class AuthService {
 
         ApplicationUser? user = await _userManager.FindByEmailAsync (model.Email);
 
-        if (user == null)
+        if (user == null) {
+            _logger.LogWarning ("Попытка входа с несуществующим email: {Email}", model.Email);
             return null;
+        }
 
-        // попытка аутентификации пользователя 
         var result = await _signInManager.PasswordSignInAsync (user, model.Password, false, false);
 
-        if (!result.Succeeded)
+        if (!result.Succeeded) {
+            _logger.LogWarning ("Неудачная попытка входа: {Email}", model.Email);
             return null;
+        }
 
-        // LOGER
+        _logger.LogInformation ("Успешный вход: {Email}", model.Email);
 
         string token = await GenerateJwtToken (user);
-
         IList<string> roles = await _userManager.GetRolesAsync (user);
 
-        UserModel userModel = new UserModel {
+        return new UserModel {
             Id = user.Id,
             FullName = user.FullName,
             Email = user.Email,
             Token = token,
             Roles = roles
         };
-
-        // LOGER
-
-        return userModel;
     }
 
 
@@ -88,7 +93,7 @@ public class AuthService {
                 new SymmetricSecurityKey (key),
                 SecurityAlgorithms.HmacSha256));
 
-        // LOGER
+        _logger.LogInformation ("JWT токен сгенерирован для пользователя: {Email}", user.Email);
 
         return new JwtSecurityTokenHandler ().WriteToken (token);
     }
@@ -113,7 +118,11 @@ public class AuthService {
 
             await _userManager.AddToRoleAsync (user, "User");
 
-            // LOGER
+            _logger.LogInformation ("Новый пользователь зарегистрирован: {Email}", model.Email);
+        }
+        else {
+            _logger.LogWarning ("Ошибка регистрации пользователя: {Email}. Ошибки: {Errors}",
+                model.Email, string.Join (", ", result.Errors.Select (e => e.Description)));
         }
 
         return result;
@@ -122,7 +131,7 @@ public class AuthService {
     public async Task LogoutAsync () {
         await _signInManager.SignOutAsync ();
 
-        // LOGER
+        _logger.LogInformation ("Пользователь вышел из системы.");
     }
 
 }

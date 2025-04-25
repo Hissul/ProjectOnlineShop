@@ -2,55 +2,66 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using Server.Data;
 using Server.Services;
 using System.Text;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration ()
+    .ReadFrom.Configuration (new ConfigurationBuilder ()
+        .AddJsonFile ("appsettings.json")
+        .Build ())
+    .Enrich.FromLogContext ()
+    .CreateLogger ();
 
 
 
-string? connectionString = builder.Configuration.GetConnectionString ("DefaultConnection");
-string? keyString = builder.Configuration["Jwt:Secret"];
-string? issuer = builder.Configuration["Jwt:Issuer"];
-string? audience = builder.Configuration["Jwt:Audience"];
 
-byte[] key = Encoding.UTF8.GetBytes (keyString);
+try {
+    Log.Information ("Starting up");
 
+    WebApplicationBuilder builder = WebApplication.CreateBuilder (args);
+    builder.Host.UseSerilog ();
 
-builder.Services.AddScoped<AuthService> ();
-builder.Services.AddScoped<StoreService> ();
-builder.Services.AddScoped<CartService> ();
-builder.Services.AddScoped<OrderService> ();
-builder.Services.AddScoped<ProductService> ();
-builder.Services.AddScoped<UserService> ();
+    string? connectionString = builder.Configuration.GetConnectionString ("DefaultConnection");
+    string? keyString = builder.Configuration["Jwt:Secret"];
+    string? issuer = builder.Configuration["Jwt:Issuer"];
+    string? audience = builder.Configuration["Jwt:Audience"];
 
-builder.Services.AddCors (options => {
-    options.AddPolicy ("AllowAll",
-        policy => policy
-            .AllowAnyOrigin ()
-            .AllowAnyMethod ()
-            .AllowAnyHeader ());            
-});
+    byte[] key = Encoding.UTF8.GetBytes (keyString);
 
-builder.Services.AddDbContext<ApplicationDbContext> (options => options.UseSqlServer (connectionString));
+    builder.Services.AddScoped<AuthService> ();
+    builder.Services.AddScoped<StoreService> ();
+    builder.Services.AddScoped<CartService> ();
+    builder.Services.AddScoped<OrderService> ();
+    builder.Services.AddScoped<ProductService> ();
+    builder.Services.AddScoped<UserService> ();
 
-builder.Services.Configure<IdentityOptions> (options => {
-    options.SignIn.RequireConfirmedAccount = false;
-});
+    builder.Services.AddCors (options => {
+        options.AddPolicy ("AllowAll",
+            policy => policy
+                .AllowAnyOrigin ()
+                .AllowAnyMethod ()
+                .AllowAnyHeader ());
+    });
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole> ()
-    .AddEntityFrameworkStores<ApplicationDbContext> ()
-    .AddDefaultTokenProviders ();
+    builder.Services.AddDbContext<ApplicationDbContext> (options => options.UseSqlServer (connectionString));
 
-// Добавляем сервисы MVC (контроллеры)
-builder.Services.AddControllers ();
+    builder.Services.Configure<IdentityOptions> (options => {
+        options.SignIn.RequireConfirmedAccount = false;
+    });
 
-// Добавляем поддержку аутентификации с JWT
-builder.Services.AddAuthentication (options => {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
+    builder.Services.AddIdentity<ApplicationUser, IdentityRole> ()
+        .AddEntityFrameworkStores<ApplicationDbContext> ()
+        .AddDefaultTokenProviders ();
+
+    builder.Services.AddControllers ();
+
+    builder.Services.AddAuthentication (options => {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
     .AddJwtBearer (options => {
         options.RequireHttpsMetadata = false;
         options.SaveToken = true;
@@ -65,40 +76,41 @@ builder.Services.AddAuthentication (options => {
         };
     });
 
-builder.Services.AddAuthorization (options => {
-    options.AddPolicy ("RequireAdministratorRole", policy => policy.RequireRole ("Admin"));
-});
+    builder.Services.AddAuthorization (options => {
+        options.AddPolicy ("RequireAdministratorRole", policy => policy.RequireRole ("Admin"));
+    });
 
+    WebApplication app = builder.Build ();
 
+    //using (var scope = app.Services.CreateScope ()) {
+    //    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext> ();
+    //    dbContext.Database.EnsureDeleted (); // Удаляет базу данных
+    //    dbContext.Database.EnsureCreated (); // Создает базу данных заново
+    //}
 
+    app.UseCors ("AllowAll");
 
-WebApplication app = builder.Build();
+    //using (IServiceScope scope = app.Services.CreateScope ()) {
+    //    IServiceProvider services = scope.ServiceProvider;
+    //    await CreateRole (services);
+    //}
 
-//using (var scope = app.Services.CreateScope ()) {
-//    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext> ();
-//    dbContext.Database.EnsureDeleted (); // Удаляет базу данных
-//    dbContext.Database.EnsureCreated (); // Создает базу данных заново
-//}
+    await using var scope = app.Services.CreateAsyncScope ();
+    await CreateRole (scope.ServiceProvider);
 
-app.UseCors ("AllowAll");
+    app.UseAuthentication ();
+    app.UseAuthorization ();
 
-//using (IServiceScope scope = app.Services.CreateScope ()) {
-//    IServiceProvider services = scope.ServiceProvider;
-//    await CreateRole (services);
-//}
-await using var scope = app.Services.CreateAsyncScope ();
-await CreateRole (scope.ServiceProvider);
+    app.MapControllers ();
 
-
-app.UseAuthentication ();
-app.UseAuthorization ();
-
-app.MapControllers ();
-
-
-
-app.Run();
-
+    app.Run ();
+}
+catch (Exception ex) {
+    Log.Fatal (ex, "Application start-up failed");
+}
+finally {
+    Log.CloseAndFlush ();
+}
 
 
 async Task CreateRole (IServiceProvider serviceProvider) {
@@ -113,14 +125,13 @@ async Task CreateRole (IServiceProvider serviceProvider) {
         }
     }
 
-    // Создание администратора (если его еще нет)
     string adminEmail = "admin@example.com";
-    ApplicationUser? adminUSer = await userManager.FindByEmailAsync (adminEmail);
+    ApplicationUser? adminUser = await userManager.FindByEmailAsync (adminEmail);
 
-    if (adminUSer == null) {
-        ApplicationUser newAdmin = new ApplicationUser { 
-            UserName = adminEmail, 
-            Email = adminEmail, 
+    if (adminUser == null) {
+        ApplicationUser newAdmin = new ApplicationUser {
+            UserName = adminEmail,
+            Email = adminEmail,
             EmailConfirmed = true,
             FullName = "I'm the Boss"
         };
@@ -128,3 +139,4 @@ async Task CreateRole (IServiceProvider serviceProvider) {
         await userManager.AddToRoleAsync (newAdmin, "Admin");
     }
 }
+
