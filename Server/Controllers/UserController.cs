@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Server.Services;
 using ShopLib;
 
@@ -6,8 +7,7 @@ namespace Server.Controllers;
 
 [Route ("user")]
 [Controller]
-
-
+[Authorize (Policy = "RequireAdministratorRole")]
 public class UserController : Controller {
 
     private readonly UserService _userService;

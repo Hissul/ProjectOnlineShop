@@ -81,12 +81,14 @@ public class UserService {
         result = await  _userManager.RemoveFromRolesAsync (user, userRoles);
 
         if (!result.Succeeded) {
+            Console.WriteLine ("\n\n\nERROR DELETE ROLOE");
             return false;
         }
 
         result = await _userManager.AddToRolesAsync (user, model.Roles);
 
         if (!result.Succeeded) {
+            Console.WriteLine ("\n\n\nERROR ADD ROLOE");
             return false;
         }
         return true;

@@ -65,21 +65,17 @@ namespace Client.Pages.Admin.Users
             User.Roles.Add (UserRole);
 
             bool result = await _userService.EditUserAsync (User);
-
-            if (!result) { 
-               
-            }
-
+           
             if (result) {
-                Notification = "Товар успешно добавлен.";
+                Notification = "Пользователь успешно изменен.";
                 NotificationType = "success";
-                return Page ();
+                return RedirectToPage (ReturnUrl);
             }
            
-             Notification = "Ошибка при добавлении товара.";
+             Notification = "Ошибка при изменении пользователя.";
              NotificationType = "error";
            
-            return RedirectToPage (ReturnUrl);
+            return Page();
         }
 
 

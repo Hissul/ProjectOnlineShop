@@ -8,6 +8,5 @@ public class ApplicationUser : IdentityUser {
     public DateTime RegisteredAt { get; set; } = DateTime.Now;
 
     public ICollection<Order> Orders { get; set; } = [];
-
     public Cart Cart { get; set; } = null!;
 }
